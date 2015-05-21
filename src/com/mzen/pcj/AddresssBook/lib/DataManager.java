@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public interface DataManager {
 	public ArrayList<?> getList();
-	
+	//This is comment
 }
