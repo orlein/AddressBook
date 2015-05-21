@@ -99,13 +99,10 @@ public class UserInterface {
 		ArrayList<Contact> contacts = cm.getList();
 		if (contacts != null){
 			Iterator<Contact> it = contacts.iterator();
-			int index = 0;
-			
 			while(it.hasNext()){
-				index++;
 				Contact temp = it.next();
 				logOutput(
-				index+"\t"+
+				temp.getKey()+"\t"+
 				temp.getName()+"\t"+
 				temp.getGender()+"\t"+
 				temp.getPhoneNumber()+"\t"+
@@ -116,14 +113,22 @@ public class UserInterface {
 			}
 		}
 		showMain();
-
 	}
 	public void showFile(String fileName){
 		FileManager.readFileAndShow(fileName);
 	}
 	public void showLoad(){
 		showFile("Interface_load");
-		cm.loadFromJsonFile();
+		String[] fileList = FileManager.findExistingFiles();
+		char input;
+		String fileName;
+		for(int i=0; i<fileList.length; i++){
+			uiOutput("* "+i+"\t"+fileList[i]);
+		}
+		uiOutput("***************************************");
+		input = inputSingleChar();
+		fileName = FileManager.fileName + ((Character)input).toString() + ".JSON";
+		cm.loadFromJsonFile(fileName);
 		logOutput("load to cm");
 		showList(cm);
 		showMain();
@@ -141,6 +146,7 @@ public class UserInterface {
 	public void showSave(){
 		showFile("Interface_save");
 		cm.saveAllContactsIntoJsonFile();
+		showMain();
 	}
 	public void showFind(){
 		showFile("Interface_find");

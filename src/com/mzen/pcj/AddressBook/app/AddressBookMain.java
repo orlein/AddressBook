@@ -10,9 +10,6 @@ public class AddressBookMain {
 		// TODO Auto-generated method stub
 		UserInterface ui = new UserInterface();
 		ui.initiate();
-		
-		//Test for Github
-		
 	}
 
 }

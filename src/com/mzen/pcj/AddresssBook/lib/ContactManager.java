@@ -10,6 +10,7 @@ public class ContactManager{
 
 	Gson gson = new Gson();
 	ArrayList<Contact> contacts_;
+	int key;
 	//ø¨∂Ù√≥ List
 	public enum Attributes{
 		NAME,
@@ -20,6 +21,7 @@ public class ContactManager{
 		MEMO
 	};
 	public ContactManager(){
+		key = 0;
 		contacts_ = new ArrayList<Contact>();
 	}
 	
@@ -28,7 +30,8 @@ public class ContactManager{
 	}
 
 	public void add(Contact contact) {
-		contact.setKey(contacts_.size());
+		key++;
+		contact.setKey(key);
 		contacts_.add(contact); 
 	}
 
@@ -122,8 +125,8 @@ public class ContactManager{
 		String fileName = FileManager.makeLatestFileName();
 		FileManager.saveStringIntoFile(gson.toJson(contacts_),fileName);
 	}
-	public void loadFromJsonFile(){
-		retrieveContactFromJson(FileManager.loadStringFromFile());
+	public void loadFromJsonFile(String fileName){
+		retrieveContactFromJson(FileManager.loadStringFromFile(fileName));
 	}
 	public void retrieveContactFromJson(String JSON){
 		ArrayList<Contact> result;

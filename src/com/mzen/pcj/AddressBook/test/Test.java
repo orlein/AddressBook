@@ -49,7 +49,7 @@ public class Test {
 		
 	}
 	public void retrieveData(){
-		cm_.loadFromJsonFile();
+		cm_.loadFromJsonFile("AddressBook0.JSON");
 		cm_.add(new Contact(
 				"Anthony Schwab",
 				Contact.Male,

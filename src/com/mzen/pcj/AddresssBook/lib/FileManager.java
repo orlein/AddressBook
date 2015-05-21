@@ -82,14 +82,28 @@ public class FileManager {
 	public static void saveStringIntoFile(String string){
 		saveStringIntoFile(string, getFileName());
 	}
-	public static String loadStringFromFile(){
+	public static String[] findExistingFiles(){
+		int index = 0;
+		String tempFileName;
+		String[] result;
+		do{
+			tempFileName = fileName+index+".JSON";
+			index++;
+		}while(new File(absolutePath+tempFileName).exists());
+		result = new String[index-1];
+		for (int i = 0; i<index-1; i++){
+			result[i] = fileName+i+".JSON";
+		}
+		return result;
+	}
+	public static String loadStringFromFile(String fileName){
 		String result;
-		if (new File(absolutePath+getFileName()).exists()){
-			System.out.println("File Loading: "+absolutePath+getFileName());
+		if (new File(absolutePath+fileName).exists()){
+			System.out.println("File Loading: "+absolutePath+fileName);
 			try {
 				BufferedReader reader;
 				reader = new BufferedReader(new InputStreamReader(
-						new FileInputStream(absolutePath+getFileName())));
+						new FileInputStream(absolutePath+fileName)));
 				result = reader.readLine();
 				reader.close();
 				return result;
