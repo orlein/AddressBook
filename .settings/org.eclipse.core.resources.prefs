@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
-encoding//resource/Interface_add=UTF-8
-encoding//resource/Interface_find=UTF-8
+encoding//resource/Interface_contactAdd=UTF-8
+encoding//resource/Interface_groupAdd=UTF-8
 encoding//resource/Interface_load=UTF-8
 encoding//src/com/mzen/pcj/AddressBook/app/UserInterface.java=UTF-8
 encoding//src/com/mzen/pcj/AddressBook/test/Test.java=UTF-8

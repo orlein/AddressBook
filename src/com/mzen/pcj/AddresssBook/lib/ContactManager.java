@@ -133,7 +133,7 @@ public class ContactManager{
 		return result;
 	}
 	public void saveAllIntoJsonFile(){	
-		String fileName = FileManager.makeLatestFileName();
+		String fileName = FileManager.makeLatestFileName(FileManager.fileName_AB);
 		FileManager.saveStringIntoFile(gson.toJson(contacts_),fileName);
 	}
 	public void saveAllIntoJsonFile(String fileName){	

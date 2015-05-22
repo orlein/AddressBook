@@ -21,4 +21,7 @@ public class Group {
 	public Group(String name){
 		setName(name);
 	}
+	public Group(String[] atts){
+		name_ = atts[0];
+	}
 }

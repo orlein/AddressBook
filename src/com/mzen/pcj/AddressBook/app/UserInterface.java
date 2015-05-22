@@ -15,9 +15,9 @@ import com.mzen.pcj.AddresssBook.lib.GroupManager;
 
 
 public class UserInterface {
-	ContactManager cm;
-	GroupManager gm;
-	ContactGroupRelationManager cgrm;
+	ContactManager cm_;
+	GroupManager gm_;
+	ContactGroupRelationManager cgrm_;
 	
 	
 	public static int atoi(String str) {
@@ -36,10 +36,7 @@ public class UserInterface {
 		return result;
 	}
 	
-	public void logOutput(String str){
-		//to Log, modify this method
-		System.out.println(str);
-	}
+	
 	public void uiOutput(String str){
 		System.out.println(str);
 	}
@@ -47,9 +44,9 @@ public class UserInterface {
 	
 	
 	public void initiate(){
-		cm = new ContactManager();
-		gm = new GroupManager();
-		cgrm = new ContactGroupRelationManager(cm,gm);
+		cm_ = new ContactManager();
+		gm_ = new GroupManager();
+		cgrm_ = new ContactGroupRelationManager(cm_,gm_);
 		showMain();
 	}
 	
@@ -58,7 +55,7 @@ public class UserInterface {
 		char inputChar;
 		try {
 			inputChar = (char) is.read();
-			logOutput("입력함:"+((Character)inputChar).toString());
+			FileManager.logOutput("입력함:"+((Character)inputChar).toString());
 			is.read();
 			is.read();
 			return inputChar;
@@ -76,7 +73,7 @@ public class UserInterface {
 		msg = scan.nextLine();
 		
 		
-		logOutput("입력함:"+msg);
+		FileManager.logOutput("입력함:"+msg);
 		
 		return msg;
 	}
@@ -88,13 +85,13 @@ public class UserInterface {
 		char temp = inputSingleChar();
 		switch(temp){
 		case '1':
-			showList(cm);
+			showList(cm_);
 			break;
 		case '2':
-			showAdd();
+			showAddContact();
 			break;
 		case '3':
-			showFind();
+			showFind(cm_);
 			break;
 		case '4':
 			showSave();
@@ -103,9 +100,10 @@ public class UserInterface {
 			showLoad();
 			break;
 		case '6':
-			showList(gm);
+			showList(gm_);
 			break;
 		case '7':
+			showAddGroup();
 			break;
 		case '8':
 			System.exit(0);
@@ -178,38 +176,43 @@ public class UserInterface {
 	public void showLoad(){
 		showFile("Interface_load");
 		String[] fileList = FileManager.findExistingFiles();
-		char input;
+		String input;
 		String fileName;
 		for(int i=0; i<fileList.length; i++){
 			uiOutput("* "+i+"\t"+fileList[i]);
 		}
 		uiOutput("***************************************");
-		input = inputSingleChar();
-		fileName = FileManager.fileName + ((Character)input).toString() + ".JSON";
-		cm.loadFromJsonFile(fileName);
-		logOutput("load to cm");
-		showList(cm);
+		input = inputString();
+		fileName = FileManager.fileName_AB + input + ".JSON";
+		cm_.loadFromJsonFile(fileName);
+		fileName = FileManager.fileName_G + input + ".JSON";
+		gm_.loadFromJsonFile(fileName);
+		fileName = FileManager.fileName_CGR + input + ".JSON";
+		cgrm_.loadFromJsonFile(fileName);
+		FileManager.logOutput("load to cm");
+		showList(cm_);
 		showMain();
 	}
-	public void showAdd(){
-		showFile("Interface_add");
+	public void showAddContact(){
+		
+		showFile("Interface_contactAdd");
 		String[] atts = {"이름","성(M/F)","전화번호","주소","이메일","메모"};
 		for (int i=0; i<atts.length; i++){
 			uiOutput(atts[i]);
 			atts[i] = inputString();
 		}
-		cm.add(new Contact(atts));
+		cm_.add(new Contact(atts));
 		showMain();
 	}
 	public void showSave(){
 		showFile("Interface_save");
-		cm.saveAllIntoJsonFile();
-		gm.saveAllIntoJsonFile();
-		cgrm.saveAllIntoJsonFile();
+		cm_.saveAllIntoJsonFile();
+		gm_.saveAllIntoJsonFile();
+		cgrm_.saveAllIntoJsonFile();
 		showMain();
 	}
-	public void showFind(){
-		showFile("Interface_find");
+	public void showFind(ContactManager cm){
+		showFile("Interface_contactFind");
 		char temp = inputSingleChar();
 		Contact result;
 		String query;
@@ -246,6 +249,26 @@ public class UserInterface {
 			break;
 		}
 	}
+	public void showFind(GroupManager gm){
+		showFile("Interface_groupFind");
+		char temp = inputSingleChar();
+		Group result;
+		String query;
+		switch (temp){
+		case '1':
+			query = inputString();
+			result = gm.find(query);
+			showGroup(result);
+			break;
+		case '2':
+			showMain();
+			break;
+		default:
+			showMain();
+			break;
+		}
+	}
+	
 	
 	public void showEdit(Contact contact){
 		showFile("Interface_contactEdit");
@@ -303,6 +326,17 @@ public class UserInterface {
 			showMain();
 			break;
 		}
+	}
+	
+	public void showAddGroup(){
+		showFile("Interface_groupAdd");
+		String[] atts = {"이름"};
+		for (int i=0; i<atts.length; i++){
+			uiOutput(atts[i]);
+			atts[i] = inputString();
+		}
+		gm_.add(new Group(atts));
+		showMain();
 	}
 	
 	//new Contact("Anthony Schwab",Contact.Male,"478229987054","1892 Nabereznyje Telny Lane","Anthony@Tafuna.samoa","example 2","Visitor");

@@ -13,21 +13,23 @@ import java.io.UnsupportedEncodingException;
 public class FileManager {
 	 
 	
-	public static String fileName = "AddressBook";
+	public static String fileName_AB = "Table_AddressBook";
+	public static String fileName_G = "Table_Group";
+	public static String fileName_CGR = "Table_ContactGroupRelation";
 	private static int curIndex = 0; 
 	static File path = new File(".");
 	static String absolutePath = path.getAbsolutePath() + "\\resource\\";
+	
+	public static void logOutput(String msg){
+		System.out.println(msg);
+	}
+	
+	
 	public static void initiate(){
 		while(true){
-			String[] filenames = {"Interface_main", "Interface_load", "Interface_list", "Interface_add"};
 			File f = new File(absolutePath);
 			if (!f.exists()){
 				f.mkdirs();
-			}else{
-				File[] interface_files = new File[filenames.length];
-				for (int i=0; i<filenames.length; i++){
-					interface_files[i] = new File(absolutePath + filenames[i]);
-				}
 			}
 		}
 	}
@@ -39,7 +41,7 @@ public class FileManager {
 					);
 			String line = null;
 			while((line = reader.readLine()) != null){
-				System.out.println(line);
+				logOutput(line);
 			}
 			reader.close();
 		} catch (UnsupportedEncodingException e) {
@@ -54,16 +56,18 @@ public class FileManager {
 		}
 		return null;
 	}
-	public static String makeLatestFileName(){
-		while (new File(absolutePath+fileName+curIndex+".JSON").exists()){
-			System.out.println("exsisting file name:" +fileName+curIndex+". Making filename...");
+	public static String makeLatestFileName(String fileName){
+		while (new File(absolutePath+fileName_AB+curIndex+".JSON").exists()){
+			logOutput("exsisting file name:" +fileName_AB+curIndex+". Making filename...");
 			curIndex++;
 		}
 		return fileName+curIndex+".JSON";
 	}
 	public static String getFileName(){
-		return fileName+curIndex+".JSON";
+		return fileName_AB+curIndex+".JSON";
 	}
+	
+	
 		
 	public static void saveStringIntoFile(String string,String fileName){
 		try {
@@ -71,7 +75,7 @@ public class FileManager {
 			if (f.exists() == false){
 				f.createNewFile();
 			}
-			System.out.println("Saving File:"+absolutePath+fileName);
+			logOutput("Saving File:"+absolutePath+fileName);
 			BufferedWriter outputFile = new BufferedWriter(new FileWriter(absolutePath+fileName,true));
 			outputFile.write(string);
 			outputFile.flush();
@@ -92,19 +96,19 @@ public class FileManager {
 		String tempFileName;
 		String[] result;
 		do{
-			tempFileName = fileName+index+".JSON";
+			tempFileName = fileName_AB+index+".JSON";
 			index++;
 		}while(new File(absolutePath+tempFileName).exists());
 		result = new String[index-1];
 		for (int i = 0; i<index-1; i++){
-			result[i] = fileName+i+".JSON";
+			result[i] = fileName_AB+i+".JSON";
 		}
 		return result;
 	}
 	public static String loadStringFromFile(String fileName){
 		String result;
 		if (new File(absolutePath+fileName).exists()){
-			System.out.println("File Loading: "+absolutePath+fileName);
+			logOutput("File Loading: "+absolutePath+fileName);
 			try {
 				BufferedReader reader;
 				reader = new BufferedReader(new InputStreamReader(
@@ -114,7 +118,7 @@ public class FileManager {
 				return result;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				System.out.println("File Not Found");
+				logOutput("File Not Found");
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -125,4 +129,5 @@ public class FileManager {
 		}
 		return null;
 	}
+	
 }
