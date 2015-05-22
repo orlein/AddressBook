@@ -10,6 +10,7 @@ import com.mzen.pcj.AddresssBook.lib.Contact;
 import com.mzen.pcj.AddresssBook.lib.ContactGroupRelationManager;
 import com.mzen.pcj.AddresssBook.lib.ContactManager;
 import com.mzen.pcj.AddresssBook.lib.FileManager;
+import com.mzen.pcj.AddresssBook.lib.Group;
 import com.mzen.pcj.AddresssBook.lib.GroupManager;
 
 
@@ -18,6 +19,23 @@ public class UserInterface {
 	GroupManager gm;
 	ContactGroupRelationManager cgrm;
 	
+	
+	public static int atoi(String str) {
+		
+		int radix = 10;
+		
+		byte[] temp = str.getBytes();
+		int result = 0;
+		for(int i=0;i<temp.length;i++) {	
+			if (temp[i] < '0' || temp[i] > '9') { // 0~9 넘어갈경우 (문자 방지)
+				throw new NumberFormatException();
+			}
+			result = (result*radix) + temp[i] - '0';
+		}	
+		
+		return result;
+	}
+	
 	public void logOutput(String str){
 		//to Log, modify this method
 		System.out.println(str);
@@ -25,14 +43,13 @@ public class UserInterface {
 	public void uiOutput(String str){
 		System.out.println(str);
 	}
+	
+	
+	
 	public void initiate(){
 		cm = new ContactManager();
 		gm = new GroupManager();
 		cgrm = new ContactGroupRelationManager(cm,gm);
-		showMain();
-	}
-	public void initiate(ContactManager contactManager){
-		cm = contactManager;
 		showMain();
 	}
 	
@@ -63,6 +80,9 @@ public class UserInterface {
 		
 		return msg;
 	}
+	
+	
+	
 	public void showMain(){
 		showFile("Interface_main");
 		char temp = inputSingleChar();
@@ -83,7 +103,7 @@ public class UserInterface {
 			showLoad();
 			break;
 		case '6':
-			showGroup();
+			showList(gm);
 			break;
 		case '7':
 			break;
@@ -91,28 +111,66 @@ public class UserInterface {
 			System.exit(0);
 			break;
 		default:
+			showMain();
 			break;
 		}
 	}
 	public void showList(ContactManager cm){
-		showFile("Interface_list");
+		showFile("Interface_contactList");
 		ArrayList<Contact> contacts = cm.getList();
 		if (contacts != null){
 			Iterator<Contact> it = contacts.iterator();
 			while(it.hasNext()){
 				Contact temp = it.next();
-				logOutput(
-				temp.getKey()+"\t"+
-				temp.getName()+"\t"+
-				temp.getGender()+"\t"+
-				temp.getPhoneNumber()+"\t"+
-				temp.getAddress()+"\t"+
-				temp.getEmail()+"\t"+
-				temp.getMemo()
-				);
+				showContact(temp);
 			}
 		}
-		showMain();
+		uiOutput("편집하시겠습니까?(y/n)");
+		char yn = inputSingleChar();
+		if (yn == 'y'){
+			uiOutput("[편집할 번호를 입력하세요]");
+			String query = inputString();
+			showEdit(cm.findByKey(atoi(query)));
+		}else{
+			showMain();
+		}
+	}
+	public void showList(GroupManager gm){
+		showFile("Interface_groupList");
+		ArrayList<Group> groups = gm.getList();
+		if(groups != null){
+			Iterator<Group> it = groups.iterator();
+			while(it.hasNext()){
+				Group temp = it.next();
+				showGroup(temp);
+			}
+		}
+		uiOutput("편집하시겠습니까?(y/n)");
+		char yn = inputSingleChar();
+		if (yn == 'y'){
+			uiOutput("[편집할 번호를 입력하세요]");
+			String query = inputString();
+			showEdit(gm.findByKey(atoi(query)));
+		}else{
+			showMain();
+		}
+	}
+	public void showGroup(Group group){
+		uiOutput(
+				group.getKey()+"\t"+
+				group.getName()
+				);
+	}
+	public void showContact(Contact contact){
+		uiOutput(
+				contact.getKey()+"\t"+
+				contact.getName()+"\t"+
+				contact.getGender()+"\t"+
+				contact.getPhoneNumber()+"\t"+
+				contact.getAddress()+"\t"+
+				contact.getEmail()+"\t"+
+				contact.getMemo()
+				);
 	}
 	public void showFile(String fileName){
 		FileManager.readFileAndShow(fileName);
@@ -145,43 +203,106 @@ public class UserInterface {
 	}
 	public void showSave(){
 		showFile("Interface_save");
-		cm.saveAllContactsIntoJsonFile();
+		cm.saveAllIntoJsonFile();
+		gm.saveAllIntoJsonFile();
+		cgrm.saveAllIntoJsonFile();
 		showMain();
 	}
 	public void showFind(){
 		showFile("Interface_find");
 		char temp = inputSingleChar();
+		Contact result;
 		String query;
 		switch(temp){
 		case '1':
 			query = inputString();
-			cm.find(query, ContactManager.Attributes.NAME);
+			result = cm.find(query, ContactManager.Attributes.NAME);
+			showContact(result);
 			break;
 		case '2':
 			query = inputString();
-			cm.find(query, ContactManager.Attributes.PHONENUMBER);
+			result = cm.find(query, ContactManager.Attributes.PHONENUMBER);
+			showContact(result);
 			break;
 		case '3':
 			query = inputString();
-			cm.find(query, ContactManager.Attributes.ADDRESS);
+			result = cm.find(query, ContactManager.Attributes.ADDRESS);
+			showContact(result);
 			break;
 		case '4':
 			query = inputString();
-			cm.find(query, ContactManager.Attributes.EMAIL);
+			result = cm.find(query, ContactManager.Attributes.EMAIL);
+			showContact(result);
 			break;
 		case '5':
 			query = inputString();
-			
+			//cgrm.find(query, GROUP);
 			break;
 		case '6':
 			showMain();
 			break;
 		default:
+			showMain();
 			break;
 		}
 	}
-	public void showGroup(){
-		
+	
+	public void showEdit(Contact contact){
+		showFile("Interface_contactEdit");
+		char temp = inputSingleChar();
+		String str;
+		switch(temp){
+		case '1':
+			str = inputString();
+			contact.setName(str);
+			showContact(contact);
+			break;
+		case '2':
+			str = inputString();
+			contact.setGender(str);
+			showContact(contact);
+			break;
+		case '3':
+			str = inputString();
+			contact.setAddress(str);
+			showContact(contact);
+			break;
+		case '4':
+			str = inputString();
+			contact.setEmail(str);
+			showContact(contact);
+			break;
+		case '5':
+			str = inputString();
+			contact.setMemo(str);
+			showContact(contact);
+			break;
+		case '6':
+			showMain();
+			break;
+		default:
+			showMain();
+			break;
+		}
+	}
+	
+	public void showEdit(Group group){
+		showFile("Interface_groupEdit");
+		char temp = inputSingleChar();
+		String str;
+		switch(temp){
+		case '1':
+			str = inputString();
+			group.setName(str);
+			showGroup(group);
+			break;
+		case '2':
+			showMain();
+			break;
+		default:
+			showMain();
+			break;
+		}
 	}
 	
 	//new Contact("Anthony Schwab",Contact.Male,"478229987054","1892 Nabereznyje Telny Lane","Anthony@Tafuna.samoa","example 2","Visitor");

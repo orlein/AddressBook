@@ -11,7 +11,7 @@ public class ContactManager{
 	Gson gson = new Gson();
 	ArrayList<Contact> contacts_;
 	int key;
-	//¿¬¶ôÃ³ List
+	//ï¿½ï¿½ï¿½ï¿½Ã³ List
 	public enum Attributes{
 		NAME,
 		GENDER,
@@ -70,6 +70,17 @@ public class ContactManager{
 		}
 		return null;
 	}
+	public Contact findByKey(int key){
+		Iterator<Contact> it = contacts_.iterator();
+		Contact result;
+		while(it.hasNext()){
+			result = it.next();
+			if(result.getKey() == key){
+				return result;
+			}
+		}
+		return null;
+	}
 	
 	public Contact edit(Contact contact, Attributes att, String string){
 		Contact result;
@@ -121,18 +132,26 @@ public class ContactManager{
 		String result = gson.toJson(contacts_);
 		return result;
 	}
-	public void saveAllContactsIntoJsonFile(){	
+	public void saveAllIntoJsonFile(){	
 		String fileName = FileManager.makeLatestFileName();
 		FileManager.saveStringIntoFile(gson.toJson(contacts_),fileName);
 	}
-	public void loadFromJsonFile(String fileName){
-		retrieveContactFromJson(FileManager.loadStringFromFile(fileName));
+	public void saveAllIntoJsonFile(String fileName){	
+		
+		FileManager.saveStringIntoFile(gson.toJson(contacts_),fileName+".JSON");
 	}
-	public void retrieveContactFromJson(String JSON){
-		ArrayList<Contact> result;
+	
+	public void loadFromJsonFile(String fileName){
+		retrieveDataFromJson(FileManager.loadStringFromFile(fileName));
+	}
+	public void retrieveDataFromJson(String JSON){
+		ArrayList<Contact> result = new ArrayList<Contact>();
 		if (JSON != "null"){
 			result = gson.fromJson(JSON, new TypeToken<ArrayList<Contact>>(){}.getType());
-			contacts_ = result;
+			Iterator<Contact> it = result.iterator();
+			while(it.hasNext()){
+				add(it.next());
+			}
 		}else{
 			result = null;
 		}

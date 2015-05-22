@@ -59,7 +59,7 @@ public class Test {
 				"example 2",
 				"Visitor"
 				));
-		cm_.saveAllContactsIntoJsonFile();
+		cm_.saveAllIntoJsonFile();
 	}
 	public ArrayList<Contact> getListFromCM(){
 		return cm_.getList();

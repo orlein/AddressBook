@@ -67,9 +67,14 @@ public class FileManager {
 		
 	public static void saveStringIntoFile(String string,String fileName){
 		try {
+			File f = new File(absolutePath+fileName);
+			if (f.exists() == false){
+				f.createNewFile();
+			}
 			System.out.println("Saving File:"+absolutePath+fileName);
 			BufferedWriter outputFile = new BufferedWriter(new FileWriter(absolutePath+fileName,true));
 			outputFile.write(string);
+			outputFile.flush();
 			outputFile.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

@@ -21,6 +21,4 @@ public class Group {
 	public Group(String name){
 		setName(name);
 	}
-
-	
 }
