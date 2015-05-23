@@ -16,8 +16,7 @@ public class Test {
 				"886649065861",
 				"1168 Najafabad Parkway",
 				"vera@kabul.afghanistan",
-				"example 1",
-				"Customer"
+				"example 1"
 				));
 		cm.add(new Contact(
 				"Mario Cheatham",
@@ -25,8 +24,7 @@ public class Test {
 				"406784385440",
 				"1924 Shimonoseki Drive",
 				"mario@batna.algeria",
-				"example 2",
-				"Customer"
+				"example 2"
 				));
 		cm.add(new Contact(
 				"Judy Gray",
@@ -34,8 +32,7 @@ public class Test {
 				"107137400143",
 				"1031 Daugavpils Parkway",
 				"judy@bchar@algeria",
-				"example 3",
-				"Customer"
+				"example 3"
 				));
 		cm.add(new Contact(
 				"June Carroll",
@@ -43,8 +40,7 @@ public class Test {
 				"506134035434",
 				"757 Rustenburg Avenue",
 				"june@Skikda.algeria",
-				"example 1",
-				"Visitor"
+				"example 1"
 				));
 		
 	}

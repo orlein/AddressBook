@@ -67,7 +67,7 @@ public class GroupManager{
 
 
 	public void saveAllIntoJsonFile() {
-		String fileName = FileManager.makeLatestFileName(FileManager.fileName_G);
+		String fileName = FileManager.getFileName(FileManager.fileName_G);
 		FileManager.saveStringIntoFile(gson.toJson(groups_),fileName);
 	}
 	public void loadFromJsonFile(String fileName){

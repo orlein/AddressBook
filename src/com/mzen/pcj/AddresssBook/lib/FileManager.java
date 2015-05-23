@@ -63,8 +63,8 @@ public class FileManager {
 		}
 		return fileName+curIndex+".JSON";
 	}
-	public static String getFileName(){
-		return fileName_AB+curIndex+".JSON";
+	public static String getFileName(String fileName){
+		return fileName+curIndex+".JSON";
 	}
 	
 	
@@ -88,9 +88,7 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
-	public static void saveStringIntoFile(String string){
-		saveStringIntoFile(string, getFileName());
-	}
+	
 	public static String[] findExistingFiles(){
 		int index = 0;
 		String tempFileName;
@@ -125,7 +123,7 @@ public class FileManager {
 				e.printStackTrace();
 			}
 		}else{
-			saveStringIntoFile("",absolutePath+getFileName());
+			saveStringIntoFile("",absolutePath+getFileName(fileName));
 		}
 		return null;
 	}

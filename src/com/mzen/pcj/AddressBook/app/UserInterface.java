@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import com.mzen.pcj.AddressBook.test.Test;
 import com.mzen.pcj.AddresssBook.lib.Contact;
+import com.mzen.pcj.AddresssBook.lib.ContactGroupRelation;
 import com.mzen.pcj.AddresssBook.lib.ContactGroupRelationManager;
 import com.mzen.pcj.AddresssBook.lib.ContactManager;
 import com.mzen.pcj.AddresssBook.lib.FileManager;
@@ -19,11 +21,12 @@ public class UserInterface {
 	GroupManager gm_;
 	ContactGroupRelationManager cgrm_;
 	
+	Test t1 = new Test();
+	
+	
 	
 	public static int atoi(String str) {
-		
-		int radix = 10;
-		
+		int radix = 10;		
 		byte[] temp = str.getBytes();
 		int result = 0;
 		for(int i=0;i<temp.length;i++) {	
@@ -35,18 +38,17 @@ public class UserInterface {
 		
 		return result;
 	}
-	
-	
 	public void uiOutput(String str){
 		System.out.println(str);
 	}
-	
-	
-	
 	public void initiate(){
 		cm_ = new ContactManager();
 		gm_ = new GroupManager();
 		cgrm_ = new ContactGroupRelationManager(cm_,gm_);
+		
+		//Testing
+		t1.makeData(cm_);
+		//
 		showMain();
 	}
 	
@@ -143,16 +145,23 @@ public class UserInterface {
 				showGroup(temp);
 			}
 		}
-		uiOutput("편집하시겠습니까?(y/n)");
+		uiOutput("선택하시겠습니까?(y/n)");
 		char yn = inputSingleChar();
 		if (yn == 'y'){
-			uiOutput("[편집할 번호를 입력하세요]");
+			uiOutput("[선택할 번호를 입력하세요]");
 			String query = inputString();
-			showEdit(gm.findByKey(atoi(query)));
+			ArrayList<Contact> contacts;
+			contacts = cgrm_.findByGroupKey(atoi(query));
+			Iterator<Contact> it2 = contacts.iterator();
+			while(it2.hasNext()){
+				Contact t2 = it2.next();
+				showContact(t2);
+			}
 		}else{
 			showMain();
 		}
 	}
+	
 	public void showGroup(Group group){
 		uiOutput(
 				group.getKey()+"\t"+
@@ -301,6 +310,15 @@ public class UserInterface {
 			showContact(contact);
 			break;
 		case '6':
+			str = inputString();
+			Group gr = gm_.find(str);
+			if(gr==null){
+				gr = new Group(str);
+				gm_.add(gr);
+			}
+			cgrm_.add(new ContactGroupRelation(contact.getKey(),gr.getKey()));
+			break;
+		case '7':
 			showMain();
 			break;
 		default:

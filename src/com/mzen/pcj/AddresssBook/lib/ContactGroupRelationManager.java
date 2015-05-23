@@ -53,7 +53,7 @@ public class ContactGroupRelationManager {
 
 
 	public void saveAllIntoJsonFile() {
-		String fileName = FileManager.makeLatestFileName(FileManager.fileName_CGR);
+		String fileName = FileManager.getFileName(FileManager.fileName_CGR);
 		FileManager.saveStringIntoFile(gson.toJson(contactGroupRelations_),fileName);
 		
 	}
@@ -73,4 +73,8 @@ public class ContactGroupRelationManager {
 		}
 		
 	}
+	
+	
+	
+	
 }
