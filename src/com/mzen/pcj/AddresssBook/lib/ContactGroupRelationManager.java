@@ -2,11 +2,14 @@ package com.mzen.pcj.AddresssBook.lib;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class ContactGroupRelationManager {
+	int key;
+	
 	ContactManager cm_;
 	GroupManager gm_;
 	
@@ -17,8 +20,11 @@ public class ContactGroupRelationManager {
 		cm_ = cm;
 		gm_ = gm;
 		contactGroupRelations_ = new ArrayList<ContactGroupRelation>();
+		key = 0;
 	}
 	public void add(ContactGroupRelation cgr){
+		key++;
+		cgr.setKey(key);;
 		contactGroupRelations_.add(cgr);
 	}
 	
@@ -36,7 +42,6 @@ public class ContactGroupRelationManager {
 		return tempContacts;
 		
 	}
-	
 	public ArrayList<Group> findByContactKey(int key){
 		ArrayList<Group> tempGroups = new ArrayList<Group>();
 		
@@ -50,6 +55,62 @@ public class ContactGroupRelationManager {
 		
 		return tempGroups; 
 	}
+	public ContactGroupRelation findByKey(int key){
+		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
+		ContactGroupRelation result;
+		while(it.hasNext()){
+			result = it.next();
+			if(result.getKey() == key){
+				return result;
+			}
+		}
+		return null;
+	}
+	public boolean remove(ContactGroupRelation cgr) {
+		if (contactGroupRelations_.remove(cgr)){
+			return true;
+		}else
+			return false;
+	}
+	public void remove(Contact contact){
+		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
+		ArrayList<Integer> arrayToBeDeleted = new ArrayList<Integer>(); 
+		int contactKey = contact.getKey();
+		while(it.hasNext()){
+			ContactGroupRelation tempCGR = it.next();
+			if (contactKey == tempCGR.getContactKey()){
+				arrayToBeDeleted.add((Integer)tempCGR.getKey());
+			}
+		}
+		
+		Iterator<Integer> itt = arrayToBeDeleted.iterator();
+		while(itt.hasNext()){
+			Integer i = itt.next();
+			remove(findByKey(i));
+		}
+		
+	}
+	public void remove(Group group){
+		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
+		ArrayList<Integer> arrayToBeDeleted = new ArrayList<Integer>();
+		int groupKey = group.getKey();
+		while(it.hasNext()){
+			ContactGroupRelation tempCGR = it.next();
+			if (groupKey == tempCGR.getContactKey()){
+				if (groupKey == tempCGR.getGroupKey()){
+					arrayToBeDeleted.add((Integer)tempCGR.getKey());
+				}
+			}
+		}
+		
+		Iterator<Integer> itt = arrayToBeDeleted.iterator();
+		while(itt.hasNext()){
+			Integer i = itt.next();
+			remove(findByKey(i));
+		}
+	}
+	
+
 
 
 	public void saveAllIntoJsonFile() {

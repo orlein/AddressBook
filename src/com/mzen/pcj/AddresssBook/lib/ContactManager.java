@@ -34,6 +34,9 @@ public class ContactManager{
 		contact.setKey(key);
 		contacts_.add(contact); 
 	}
+	public Contact getLatest(){
+		return contacts_.get(contacts_.size()-1);
+	}
 
 	public Contact find(String query, Attributes att){
 		Iterator<Contact> it = contacts_.iterator();

@@ -47,7 +47,7 @@ public class UserInterface {
 		cgrm_ = new ContactGroupRelationManager(cm_,gm_);
 		
 		//Testing
-		t1.makeData(cm_);
+		t1.makeData(cm_,gm_,cgrm_);
 		//
 		showMain();
 	}
@@ -129,7 +129,9 @@ public class UserInterface {
 		char yn = inputSingleChar();
 		if (yn == 'y'){
 			uiOutput("[편집할 번호를 입력하세요]");
+			
 			String query = inputString();
+			showContact(cm.findByKey(atoi(query)));
 			showEdit(cm.findByKey(atoi(query)));
 		}else{
 			showMain();
@@ -157,6 +159,7 @@ public class UserInterface {
 				Contact t2 = it2.next();
 				showContact(t2);
 			}
+			showList(gm);
 		}else{
 			showMain();
 		}
@@ -169,6 +172,7 @@ public class UserInterface {
 				);
 	}
 	public void showContact(Contact contact){
+		
 		uiOutput(
 				contact.getKey()+"\t"+
 				contact.getName()+"\t"+
@@ -179,6 +183,7 @@ public class UserInterface {
 				contact.getMemo()
 				);
 	}
+	
 	public void showFile(String fileName){
 		FileManager.readFileAndShow(fileName);
 	}
@@ -190,6 +195,9 @@ public class UserInterface {
 		for(int i=0; i<fileList.length; i++){
 			uiOutput("* "+i+"\t"+fileList[i]);
 		}
+		cm_ = new ContactManager();
+		gm_ = new GroupManager();
+		cgrm_ = new ContactGroupRelationManager(cm_,gm_);
 		uiOutput("***************************************");
 		input = inputString();
 		fileName = FileManager.fileName_AB + input + ".JSON";
@@ -310,6 +318,7 @@ public class UserInterface {
 			showContact(contact);
 			break;
 		case '6':
+			uiOutput("연락처에 추가할 그룹 이름을 입력하세요");
 			str = inputString();
 			Group gr = gm_.find(str);
 			if(gr==null){
@@ -317,8 +326,15 @@ public class UserInterface {
 				gm_.add(gr);
 			}
 			cgrm_.add(new ContactGroupRelation(contact.getKey(),gr.getKey()));
+			showMain();
 			break;
 		case '7':
+			FileManager.logOutput("Deleted contact: "+contact.getKey()+"\t"+contact.getName());
+			cgrm_.remove(contact);
+			cm_.remove(contact);
+			showMain();
+			break;
+		case '8':
 			showMain();
 			break;
 		default:

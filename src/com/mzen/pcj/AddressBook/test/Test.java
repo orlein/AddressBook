@@ -4,12 +4,20 @@ package com.mzen.pcj.AddressBook.test;
 import java.util.ArrayList;
 
 import com.mzen.pcj.AddresssBook.lib.Contact;
+import com.mzen.pcj.AddresssBook.lib.ContactGroupRelation;
+import com.mzen.pcj.AddresssBook.lib.ContactGroupRelationManager;
 import com.mzen.pcj.AddresssBook.lib.ContactManager;
+import com.mzen.pcj.AddresssBook.lib.Group;
+import com.mzen.pcj.AddresssBook.lib.GroupManager;
 
 public class Test {
 	ContactManager cm_ = new ContactManager();
+	GroupManager gm_ = new GroupManager();
+	ContactGroupRelationManager cgrm_ = new ContactGroupRelationManager(cm_,gm_);
 	
-	public void makeData(ContactManager cm){
+	public void makeData(ContactManager cm, GroupManager gm, ContactGroupRelationManager cgrm){
+		gm.add(new Group("Visitor"));
+		gm.add(new Group("Customer"));
 		cm.add(new Contact(
 				"Vera Mccoy",
 				Contact.Female,
@@ -18,6 +26,7 @@ public class Test {
 				"vera@kabul.afghanistan",
 				"example 1"
 				));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),1));
 		cm.add(new Contact(
 				"Mario Cheatham",
 				Contact.Male,
@@ -26,6 +35,8 @@ public class Test {
 				"mario@batna.algeria",
 				"example 2"
 				));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),1));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),2));
 		cm.add(new Contact(
 				"Judy Gray",
 				Contact.Female,
@@ -34,6 +45,7 @@ public class Test {
 				"judy@bchar@algeria",
 				"example 3"
 				));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),2));
 		cm.add(new Contact(
 				"June Carroll",
 				Contact.Female,
@@ -42,6 +54,8 @@ public class Test {
 				"june@Skikda.algeria",
 				"example 1"
 				));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),2));
+		
 		
 	}
 	public void retrieveData(){
