@@ -26,14 +26,23 @@ public class GroupManager{
 		group.setKey(id_);
 		groups_.add(group);
 	}
+	public Group[] makeIntoArray(){
+		Iterator<Group> it = groups_.iterator();
+		Group[] result = new Group[groups_.size()];
+		int i=0;
+		while(it.hasNext()){
+			result[i] = it.next();
+			i++;
+		}
+		return result;
+	}
 	
-	
-	public Group find(String groupName){
+	public Group find(String query){
 		Iterator<Group> it = groups_.iterator();
 		Group temp;
 		while(it.hasNext()){
 			temp = it.next();
-			if (temp.getName() == groupName){
+			if (temp.getName().contains(query)){
 				return temp;
 			}
 		}

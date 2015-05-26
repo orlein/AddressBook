@@ -37,6 +37,16 @@ public class ContactManager{
 	public Contact getLatest(){
 		return contacts_.get(contacts_.size()-1);
 	}
+	public Contact[] makeIntoArray(){
+		Iterator<Contact> it = contacts_.iterator();
+		Contact[] result = new Contact[contacts_.size()];
+		int i=0;
+		while(it.hasNext()){
+			result[i] = it.next();
+			i++;
+		}
+		return result;
+	}
 
 	public Contact find(String query, Attributes att){
 		Iterator<Contact> it = contacts_.iterator();

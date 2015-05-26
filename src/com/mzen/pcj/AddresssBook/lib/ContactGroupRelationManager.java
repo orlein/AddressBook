@@ -26,6 +26,16 @@ public class ContactGroupRelationManager {
 		cgr.setId(id_);;
 		contactGroupRelations_.add(cgr);
 	}
+	public ContactGroupRelation[] makeIntoArray(){
+		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
+		ContactGroupRelation[] result = new ContactGroupRelation[contactGroupRelations_.size()];
+		int i=0;
+		while(it.hasNext()){
+			result[i] = it.next();
+			i++;
+		}
+		return result;
+	}
 	
 	public ArrayList<Contact> findByGroupId(int id){
 		ArrayList<Contact> tempContacts = new ArrayList<Contact>();

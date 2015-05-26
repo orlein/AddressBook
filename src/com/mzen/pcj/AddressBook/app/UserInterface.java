@@ -11,6 +11,7 @@ import com.mzen.pcj.AddresssBook.lib.Contact;
 import com.mzen.pcj.AddresssBook.lib.ContactGroupRelation;
 import com.mzen.pcj.AddresssBook.lib.ContactGroupRelationManager;
 import com.mzen.pcj.AddresssBook.lib.ContactManager;
+import com.mzen.pcj.AddresssBook.lib.DatabaseManager;
 import com.mzen.pcj.AddresssBook.lib.FileManager;
 import com.mzen.pcj.AddresssBook.lib.Group;
 import com.mzen.pcj.AddresssBook.lib.GroupManager;
@@ -45,10 +46,11 @@ public class UserInterface {
 		cm_ = new ContactManager();
 		gm_ = new GroupManager();
 		cgrm_ = new ContactGroupRelationManager(cm_,gm_);
-		
-		//Testing
-		t1.makeData(cm_,gm_,cgrm_);
-		//
+		DatabaseManager.init("newuser", "Dpawps!@#$");
+		cm_ = DatabaseManager.loadContactFromDB();
+		gm_ = DatabaseManager.loadGroupFromDB();
+		cgrm_ = DatabaseManager.loadCGRFromDB(cm_, gm_);
+
 		showMain();
 	}
 	
@@ -84,6 +86,7 @@ public class UserInterface {
 	
 	public void showMain(){
 		showFile("Interface_main");
+		
 		char temp = inputSingleChar();
 		switch(temp){
 		case '1':
@@ -108,6 +111,10 @@ public class UserInterface {
 			showAddGroup();
 			break;
 		case '8':
+			//DatabaseManager.saveContactIntoDB(cm_);
+			//DatabaseManager.saveGroupIntoDB(gm_);
+			//DatabaseManager.saveCGRIntoDB(cgrm_);
+			DatabaseManager.endConn();
 			System.exit(0);
 			break;
 		default:
@@ -172,7 +179,6 @@ public class UserInterface {
 				);
 	}
 	public void showContact(Contact contact){
-		
 		uiOutput(
 				contact.getId()+"\t"+
 				contact.getName()+"\t"+
@@ -211,14 +217,15 @@ public class UserInterface {
 		showMain();
 	}
 	public void showAddContact(){
-		
 		showFile("Interface_contactAdd");
 		String[] atts = {"이름","성(M/F)","전화번호","주소","이메일","메모"};
 		for (int i=0; i<atts.length; i++){
 			uiOutput(atts[i]);
 			atts[i] = inputString();
 		}
-		cm_.add(new Contact(atts));
+		Contact con = new Contact(atts);
+		cm_.add(con);
+		DatabaseManager.saveContactIntoDB(con);
 		showMain();
 	}
 	public void showSave(){
@@ -325,7 +332,9 @@ public class UserInterface {
 				gr = new Group(str);
 				gm_.add(gr);
 			}
-			cgrm_.add(new ContactGroupRelation(contact.getId(),gr.getId()));
+			ContactGroupRelation cgr = new ContactGroupRelation(contact.getId(),gr.getId());
+			cgrm_.add(cgr);
+			DatabaseManager.saveCGRIntoDB(cgr);
 			showMain();
 			break;
 		case '7':
@@ -368,7 +377,9 @@ public class UserInterface {
 		for (int i=0; i<atts.length; i++){
 			uiOutput(atts[i]);
 			atts[i] = inputString();
-			gm_.add(new Group(atts[i]));
+			Group gr = new Group(atts[i]);
+			gm_.add(gr);
+			DatabaseManager.saveGroupIntoDB(gr);
 		}
 		
 		showMain();
