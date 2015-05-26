@@ -12,18 +12,18 @@ public class GroupManager{
 	
 	ArrayList<Group> groups_;
 	Gson gson = new Gson();
-	int key;
+	int id_;
 	
 	
 	public GroupManager(){
-		key = 0;
+		id_ = 0;
 		groups_ = new ArrayList<Group>();
 	}
 	
 	
 	public void add(Group group){
-		key++;
-		group.setKey(key);
+		id_++;
+		group.setKey(id_);
 		groups_.add(group);
 	}
 	
@@ -39,12 +39,12 @@ public class GroupManager{
 		}
 		return null;
 	}
-	public Group findByKey(int key){
+	public Group findById(int id){
 		Iterator<Group> it = groups_.iterator();
 		Group result;
 		while(it.hasNext()){
 			result = it.next();
-			if(result.getKey() == key){
+			if(result.getId() == id){
 				return result;
 			}
 		}

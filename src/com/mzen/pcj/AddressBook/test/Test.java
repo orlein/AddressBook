@@ -26,7 +26,7 @@ public class Test {
 				"vera@kabul.afghanistan",
 				"example 1"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),1));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),1));
 		cm.add(new Contact(
 				"Mario Cheatham",
 				Contact.Male,
@@ -35,8 +35,8 @@ public class Test {
 				"mario@batna.algeria",
 				"example 2"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),1));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),2));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),1));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),2));
 		cm.add(new Contact(
 				"Judy Gray",
 				Contact.Female,
@@ -45,7 +45,7 @@ public class Test {
 				"judy@bchar@algeria",
 				"example 3"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),2));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),2));
 		cm.add(new Contact(
 				"June Carroll",
 				Contact.Female,
@@ -54,7 +54,7 @@ public class Test {
 				"june@Skikda.algeria",
 				"example 1"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getKey(),2));
+		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),2));
 		
 		
 	}

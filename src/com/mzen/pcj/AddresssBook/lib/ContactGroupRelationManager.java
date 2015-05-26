@@ -2,13 +2,12 @@ package com.mzen.pcj.AddresssBook.lib;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.ListIterator;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class ContactGroupRelationManager {
-	int key;
+	int id_;
 	
 	ContactManager cm_;
 	GroupManager gm_;
@@ -20,47 +19,47 @@ public class ContactGroupRelationManager {
 		cm_ = cm;
 		gm_ = gm;
 		contactGroupRelations_ = new ArrayList<ContactGroupRelation>();
-		key = 0;
+		id_ = 0;
 	}
 	public void add(ContactGroupRelation cgr){
-		key++;
-		cgr.setKey(key);;
+		id_++;
+		cgr.setId(id_);;
 		contactGroupRelations_.add(cgr);
 	}
 	
-	public ArrayList<Contact> findByGroupKey(int key){
+	public ArrayList<Contact> findByGroupId(int id){
 		ArrayList<Contact> tempContacts = new ArrayList<Contact>();
 		
 		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
 		while(it.hasNext()){
 			ContactGroupRelation tempCGR = it.next();
-			if (tempCGR.getGroupKey() == key){
-				tempContacts.add(cm_.findByKey(tempCGR.getContactKey()));
+			if (tempCGR.getGroupId() == id){
+				tempContacts.add(cm_.findByKey(tempCGR.getContactId()));
 			}
 		}
 		
 		return tempContacts;
 		
 	}
-	public ArrayList<Group> findByContactKey(int key){
+	public ArrayList<Group> findByContactId(int id){
 		ArrayList<Group> tempGroups = new ArrayList<Group>();
 		
 		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
 		while(it.hasNext()){
 			ContactGroupRelation tempCGR = it.next();
-			if(tempCGR.getContactKey() == key){
-				tempGroups.add(gm_.findByKey(tempCGR.getGroupKey()));
+			if(tempCGR.getContactId() == id){
+				tempGroups.add(gm_.findById(tempCGR.getGroupId()));
 			}
 		}
 		
 		return tempGroups; 
 	}
-	public ContactGroupRelation findByKey(int key){
+	public ContactGroupRelation findById(int id){
 		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
 		ContactGroupRelation result;
 		while(it.hasNext()){
 			result = it.next();
-			if(result.getKey() == key){
+			if(result.getId() == id){
 				return result;
 			}
 		}
@@ -75,30 +74,30 @@ public class ContactGroupRelationManager {
 	public void remove(Contact contact){
 		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
 		ArrayList<Integer> arrayToBeDeleted = new ArrayList<Integer>(); 
-		int contactKey = contact.getKey();
+		int contactId = contact.getId();
 		while(it.hasNext()){
 			ContactGroupRelation tempCGR = it.next();
-			if (contactKey == tempCGR.getContactKey()){
-				arrayToBeDeleted.add((Integer)tempCGR.getKey());
+			if (contactId == tempCGR.getContactId()){
+				arrayToBeDeleted.add((Integer)tempCGR.getId());
 			}
 		}
 		
 		Iterator<Integer> itt = arrayToBeDeleted.iterator();
 		while(itt.hasNext()){
 			Integer i = itt.next();
-			remove(findByKey(i));
+			remove(findById(i));
 		}
 		
 	}
 	public void remove(Group group){
 		Iterator<ContactGroupRelation> it = contactGroupRelations_.iterator();
 		ArrayList<Integer> arrayToBeDeleted = new ArrayList<Integer>();
-		int groupKey = group.getKey();
+		int groupId = group.getId();
 		while(it.hasNext()){
 			ContactGroupRelation tempCGR = it.next();
-			if (groupKey == tempCGR.getContactKey()){
-				if (groupKey == tempCGR.getGroupKey()){
-					arrayToBeDeleted.add((Integer)tempCGR.getKey());
+			if (groupId == tempCGR.getContactId()){
+				if (groupId == tempCGR.getGroupId()){
+					arrayToBeDeleted.add((Integer)tempCGR.getId());
 				}
 			}
 		}
@@ -106,7 +105,7 @@ public class ContactGroupRelationManager {
 		Iterator<Integer> itt = arrayToBeDeleted.iterator();
 		while(itt.hasNext()){
 			Integer i = itt.next();
-			remove(findByKey(i));
+			remove(findById(i));
 		}
 	}
 	

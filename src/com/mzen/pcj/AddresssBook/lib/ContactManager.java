@@ -10,7 +10,7 @@ public class ContactManager{
 
 	Gson gson = new Gson();
 	ArrayList<Contact> contacts_;
-	int key;
+	int id;
 	//����ó List
 	public enum Attributes{
 		NAME,
@@ -21,7 +21,7 @@ public class ContactManager{
 		MEMO
 	};
 	public ContactManager(){
-		key = 0;
+		id = 0;
 		contacts_ = new ArrayList<Contact>();
 	}
 	
@@ -30,8 +30,8 @@ public class ContactManager{
 	}
 
 	public void add(Contact contact) {
-		key++;
-		contact.setKey(key);
+		id++;
+		contact.setId(id);
 		contacts_.add(contact); 
 	}
 	public Contact getLatest(){
@@ -73,12 +73,12 @@ public class ContactManager{
 		}
 		return null;
 	}
-	public Contact findByKey(int key){
+	public Contact findByKey(int id){
 		Iterator<Contact> it = contacts_.iterator();
 		Contact result;
 		while(it.hasNext()){
 			result = it.next();
-			if(result.getKey() == key){
+			if(result.getId() == id){
 				return result;
 			}
 		}

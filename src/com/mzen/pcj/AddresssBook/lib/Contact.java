@@ -4,7 +4,7 @@ package com.mzen.pcj.AddresssBook.lib;
 
 public class Contact {
 
-	private int key_;
+	private int id_;
 	private String name_;
 	private String gender_; //only M and F
 		public static final String Male = "M";
@@ -14,8 +14,8 @@ public class Contact {
 	private String email_;
 	private String memo_;
 	
-	public int getKey(){
-		return key_;
+	public int getId(){
+		return id_;
 	}
 	public String getName(){
 		return name_;
@@ -57,8 +57,8 @@ public class Contact {
 		memo_ = memo;
 	}
 	
-	public void setKey(int key){
-		key_ = key;
+	public void setId(int id){
+		id_ = id;
 	}
 	
 	

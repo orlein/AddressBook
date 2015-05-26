@@ -153,7 +153,7 @@ public class UserInterface {
 			uiOutput("[선택할 번호를 입력하세요]");
 			String query = inputString();
 			ArrayList<Contact> contacts;
-			contacts = cgrm_.findByGroupKey(atoi(query));
+			contacts = cgrm_.findByGroupId(atoi(query));
 			Iterator<Contact> it2 = contacts.iterator();
 			while(it2.hasNext()){
 				Contact t2 = it2.next();
@@ -167,14 +167,14 @@ public class UserInterface {
 	
 	public void showGroup(Group group){
 		uiOutput(
-				group.getKey()+"\t"+
+				group.getId()+"\t"+
 				group.getName()
 				);
 	}
 	public void showContact(Contact contact){
 		
 		uiOutput(
-				contact.getKey()+"\t"+
+				contact.getId()+"\t"+
 				contact.getName()+"\t"+
 				contact.getGender()+"\t"+
 				contact.getPhoneNumber()+"\t"+
@@ -325,11 +325,11 @@ public class UserInterface {
 				gr = new Group(str);
 				gm_.add(gr);
 			}
-			cgrm_.add(new ContactGroupRelation(contact.getKey(),gr.getKey()));
+			cgrm_.add(new ContactGroupRelation(contact.getId(),gr.getId()));
 			showMain();
 			break;
 		case '7':
-			FileManager.logOutput("Deleted contact: "+contact.getKey()+"\t"+contact.getName());
+			FileManager.logOutput("Deleted contact: "+contact.getId()+"\t"+contact.getName());
 			cgrm_.remove(contact);
 			cm_.remove(contact);
 			showMain();
@@ -368,8 +368,9 @@ public class UserInterface {
 		for (int i=0; i<atts.length; i++){
 			uiOutput(atts[i]);
 			atts[i] = inputString();
+			gm_.add(new Group(atts[i]));
 		}
-		gm_.add(new Group(atts));
+		
 		showMain();
 	}
 	

@@ -1,32 +1,32 @@
 package com.mzen.pcj.AddresssBook.lib;
 
 public class ContactGroupRelation {
-	int key_;
-	int contactKey_;
-	int groupKey_;
+	int id_;
+	int contactId_;
+	int groupId_;
 
 
-	public int getKey(){
-		return key_;
+	public int getId(){
+		return id_;
 	}
-	public int getContactKey() {
-		return contactKey_;
+	public int getContactId() {
+		return contactId_;
 	}
-	public void setContactKey(int contactKey) {
-		contactKey_ = contactKey;
+	public void setContactId(int contactId) {
+		contactId_ = contactId;
 	}
-	public int getGroupKey() {
-		return groupKey_;
+	public int getGroupId() {
+		return groupId_;
 	}
-	public void setGroupKey(int groupKey) {
-		groupKey_ = groupKey;
+	public void setGroupId(int groupId) {
+		groupId_ = groupId;
 	}
-	public void setKey(int key){
-		key_ = key;
+	public void setId(int id){
+		id_ = id;
 	}
-	public ContactGroupRelation(int contactKey, int groupKey){
-		setContactKey(contactKey);
-		setGroupKey(groupKey);
+	public ContactGroupRelation(int contactId, int groupId){
+		setContactId(contactId);
+		setGroupId(groupId);
 	}
 	
 }

@@ -1,17 +1,17 @@
 package com.mzen.pcj.AddresssBook.lib;
 
 public class Group {
-	int key_;
+	int id_;
 	String name_;
-	public int getKey() {
-		return key_;
+	public int getId() {
+		return id_;
 	}
 	public String getName() {
 		return name_;
 	}
 	
-	public void setKey(int key) {
-		key_ = key;
+	public void setKey(int id) {
+		id_ = id;
 	}
 	
 	public void setName(String name) {
@@ -21,7 +21,5 @@ public class Group {
 	public Group(String name){
 		setName(name);
 	}
-	public Group(String[] atts){
-		name_ = atts[0];
-	}
+	
 }
