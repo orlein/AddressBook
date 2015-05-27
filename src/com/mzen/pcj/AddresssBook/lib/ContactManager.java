@@ -10,7 +10,7 @@ public class ContactManager{
 
 	Gson gson = new Gson();
 	ArrayList<Contact> contacts_;
-	int id;
+	int latestId_;
 	//����ó List
 	public enum Attributes{
 		NAME,
@@ -21,17 +21,22 @@ public class ContactManager{
 		MEMO
 	};
 	public ContactManager(){
-		id = 0;
+		latestId_ = 0;
 		contacts_ = new ArrayList<Contact>();
 	}
 	
 	public ArrayList<Contact> getList(){
 		return contacts_;
 	}
-
+	public int getLatestId(){
+		return contacts_.get(contacts_.size()-1).getId();
+	}
+	public void setLatestId(int latestId){
+		latestId_ = latestId;
+	}
 	public void add(Contact contact) {
-		id++;
-		contact.setId(id);
+		//id++;
+		//contact.setId(id);
 		contacts_.add(contact); 
 	}
 	public Contact getLatest(){
@@ -48,40 +53,52 @@ public class ContactManager{
 		return result;
 	}
 
-	public Contact find(String query, Attributes att){
+	public ArrayList<Contact> find(String query, String att){
 		Iterator<Contact> it = contacts_.iterator();
-		Contact result;
+		Contact temp;
+		ArrayList<Contact> result = new ArrayList<Contact>();
 		while(it.hasNext()){
-			result = it.next();
+			temp = it.next();
 			switch(att){
-			case NAME:
-				if (result.getName().contains(query)){
-					return result;
+			case "NAME":
+				if (temp.getName().contains(query)){
+					FileManager.logOutput("Found name:"+ query);
+					result.add(temp);
 				}
-			case GENDER:
-				if (result.getGender().contains(query)){
-					return result;
+				break;
+			case "GENDER":
+				if (temp.getGender().contains(query)){
+					FileManager.logOutput("Found gender: "+query);
+					result.add(temp);
 				}
-			case PHONENUMBER:
-				if (result.getPhoneNumber().contains(query)){
-					return result;
+				break;
+			case "PHONENUMBER":
+				if (temp.getPhoneNumber().contains(query)){
+					FileManager.logOutput("Found phonenumber: "+ query);
+					result.add(temp);
 				}
-			case ADDRESS:
-				if (result.getAddress().contains(query)){
-					return result;
+				break;
+			case "ADDRESS":
+				if (temp.getAddress().contains(query)){
+					FileManager.logOutput("Found address: "+query);
+					result.add(temp);
 				}
-			case EMAIL:
-				if (result.getEmail().contains(query)){
-					return result;
+				break;
+			case "EMAIL":
+				if (temp.getEmail().contains(query)){
+					FileManager.logOutput("Found email: "+query);
+					result.add(temp);
 				}
-			case MEMO:
-				//CANNOT FIND BY MEMO
+				break;
+			case "MEMO":
+				FileManager.logOutput("cannot find by memo");
 				return null;
 			default:
+				FileManager.logOutput("cannot find the query attribute");
 				return null;
 			}
 		}
-		return null;
+		return result;
 	}
 	public Contact findByKey(int id){
 		Iterator<Contact> it = contacts_.iterator();

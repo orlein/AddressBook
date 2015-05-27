@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class ContactGroupRelationManager {
-	int id_;
+	int latestId_;
 	
 	ContactManager cm_;
 	GroupManager gm_;
@@ -19,11 +19,17 @@ public class ContactGroupRelationManager {
 		cm_ = cm;
 		gm_ = gm;
 		contactGroupRelations_ = new ArrayList<ContactGroupRelation>();
-		id_ = 0;
+		//id_ = 0;
+	}
+	public int getLatestId(){
+		return contactGroupRelations_.get(contactGroupRelations_.size()-1).getId();
+	}
+	public void setLatestId(int latestId){
+		latestId_ = latestId;
 	}
 	public void add(ContactGroupRelation cgr){
-		id_++;
-		cgr.setId(id_);;
+		//id_++;
+		//cgr.setId(id_);;
 		contactGroupRelations_.add(cgr);
 	}
 	public ContactGroupRelation[] makeIntoArray(){

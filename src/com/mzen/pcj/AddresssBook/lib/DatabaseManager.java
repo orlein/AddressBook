@@ -73,8 +73,9 @@ public class DatabaseManager {
 		        String email_ = rs.getString("email");
 		        String memo_ = rs.getString("memo");
 		        
-		        Contact contact = new Contact(name_, gender_, phoneNumber_, address_, email_, memo_);
+		        Contact contact = new Contact(id_, name_, gender_, phoneNumber_, address_, email_, memo_);
 		        cm.add(contact);
+		        
 		        // print the results
 		        //System.out.format("%s, %s, %s, %s, %s, %s\n", id_, name_, gender_, phoneNumber_, address_, email_, memo_);
 		    }
@@ -98,7 +99,7 @@ public class DatabaseManager {
 		    	int id_ = rs.getInt("id");
 		    	String name_ = rs.getString("name");
 		    	//System.out.format("%s, %s\n",id_,name_);
-		    	Group group = new Group(name_);
+		    	Group group = new Group(id_, name_);
 		    	gm.add(group);
 		    }
 		    st.close();
@@ -120,7 +121,7 @@ public class DatabaseManager {
 				int id_ = rs.getInt("id");
 				int contactID_ = rs.getInt("contactID");
 				int groupID_ = rs.getInt("groupID");
-				ContactGroupRelation cgr = new ContactGroupRelation(contactID_,groupID_);
+				ContactGroupRelation cgr = new ContactGroupRelation(id_, contactID_,groupID_);
 		    	//System.out.format("%s, %s, %s\n",id_,contactID_,groupID_);
 				cgrm.add(cgr);
 			}
@@ -239,6 +240,40 @@ public class DatabaseManager {
 		}
 	}
 	
+	public static void removeContactFromDB(Contact contact){
+		try{
+			Statement st = conn.createStatement();
+			String query = "USE addressbook";
+			st.executeQuery(query);
+			query = "DELETE FROM contactgrouprelation where contactID = " + contact.getId();
+			st.executeUpdate(query);
+			query = "DELETE FROM contact where ID = " + contact.getId();
+			st.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}
+	}
+	public static void removeGroupFromDB(Group group){
+		try{
+			Statement st = conn.createStatement();
+			String query = "USE addressbook";
+			st.executeQuery(query);
+			query = "DELETE FROM contactgrouprelation where groupID = " + group.getId();
+			st.executeUpdate(query);
+			query = "DELETE FROM grouptable where ID = " + group.getId();
+			st.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	public static void editContactFromDB(Contact contact){}
+	public static void editGroupFromDB(Group group){
+		//did not write the code yet
+	}
+	public static void editCGRFromDB(ContactGroupRelation cgr){}
 	
 	public static void endConn(){
 		try {

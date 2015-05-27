@@ -64,7 +64,6 @@ public class UserInterface {
 			is.read();
 			return inputChar;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
@@ -111,9 +110,6 @@ public class UserInterface {
 			showAddGroup();
 			break;
 		case '8':
-			//DatabaseManager.saveContactIntoDB(cm_);
-			//DatabaseManager.saveGroupIntoDB(gm_);
-			//DatabaseManager.saveCGRIntoDB(cgrm_);
 			DatabaseManager.endConn();
 			System.exit(0);
 			break;
@@ -148,28 +144,17 @@ public class UserInterface {
 		showFile("Interface_groupList");
 		ArrayList<Group> groups = gm.getList();
 		if(groups != null){
-			Iterator<Group> it = groups.iterator();
-			while(it.hasNext()){
-				Group temp = it.next();
-				showGroup(temp);
-			}
-		}
-		uiOutput("선택하시겠습니까?(y/n)");
-		char yn = inputSingleChar();
-		if (yn == 'y'){
+			showGroup(groups);
 			uiOutput("[선택할 번호를 입력하세요]");
 			String query = inputString();
 			ArrayList<Contact> contacts;
 			contacts = cgrm_.findByGroupId(atoi(query));
-			Iterator<Contact> it2 = contacts.iterator();
-			while(it2.hasNext()){
-				Contact t2 = it2.next();
-				showContact(t2);
-			}
-			showList(gm);
-		}else{
-			showMain();
+			showContact(contacts);	
+			showEdit(gm_.findById(atoi(query)));
 		}
+		
+		showMain();
+		
 	}
 	
 	public void showGroup(Group group){
@@ -177,6 +162,14 @@ public class UserInterface {
 				group.getId()+"\t"+
 				group.getName()
 				);
+	}
+	public void showGroup(ArrayList<Group> al){
+		Iterator<Group> it = al.iterator();
+		Group group;
+		while(it.hasNext()){
+			group = it.next();
+			showGroup(group);
+		}
 	}
 	public void showContact(Contact contact){
 		uiOutput(
@@ -188,6 +181,14 @@ public class UserInterface {
 				contact.getEmail()+"\t"+
 				contact.getMemo()
 				);
+	}
+	public void showContact(ArrayList<Contact> al){
+		Iterator<Contact> it = al.iterator();
+		Contact contact;
+		while(it.hasNext()){
+			contact = it.next();
+			showContact(contact);
+		}
 	}
 	
 	public void showFile(String fileName){
@@ -233,50 +234,58 @@ public class UserInterface {
 		cm_.saveAllIntoJsonFile();
 		gm_.saveAllIntoJsonFile();
 		cgrm_.saveAllIntoJsonFile();
+		
+		
 		showMain();
 	}
 	public void showFind(ContactManager cm){
 		showFile("Interface_contactFind");
 		char temp = inputSingleChar();
-		Contact result;
+		ArrayList<Contact> result;
 		String query;
 		switch(temp){
 		case '1':
+			uiOutput("검색할 이름을 입력하세요");
 			query = inputString();
-			result = cm.find(query, ContactManager.Attributes.NAME);
+			result = cm.find(query, "NAME");
 			showContact(result);
 			break;
 		case '2':
+			uiOutput("검색할 전화번호를 입력하세요");
 			query = inputString();
-			result = cm.find(query, ContactManager.Attributes.PHONENUMBER);
+			result = cm.find(query, "PHONENUMBER");
 			showContact(result);
 			break;
 		case '3':
+			uiOutput("검색할 주소를 입력하세요");
 			query = inputString();
-			result = cm.find(query, ContactManager.Attributes.ADDRESS);
+			result = cm.find(query, "ADDRESS");
 			showContact(result);
 			break;
 		case '4':
+			uiOutput("검색할 이메일을 입력하세요");
 			query = inputString();
-			result = cm.find(query, ContactManager.Attributes.EMAIL);
+			result = cm.find(query, "EMAIL");
 			showContact(result);
 			break;
 		case '5':
+			uiOutput("검색할 그룹을 입력하세요");
 			query = inputString();
-			//cgrm.find(query, GROUP);
+			gm_.find(query);
 			break;
 		case '6':
-			showMain();
+			
 			break;
 		default:
-			showMain();
+			
 			break;
 		}
+		showMain();
 	}
 	public void showFind(GroupManager gm){
 		showFile("Interface_groupFind");
 		char temp = inputSingleChar();
-		Group result;
+		ArrayList<Group> result;
 		String query;
 		switch (temp){
 		case '1':
@@ -285,12 +294,11 @@ public class UserInterface {
 			showGroup(result);
 			break;
 		case '2':
-			showMain();
 			break;
 		default:
-			showMain();
 			break;
 		}
+		showMain();
 	}
 	
 	
@@ -303,53 +311,60 @@ public class UserInterface {
 			str = inputString();
 			contact.setName(str);
 			showContact(contact);
+			
 			break;
 		case '2':
 			str = inputString();
 			contact.setGender(str);
 			showContact(contact);
+			
 			break;
 		case '3':
 			str = inputString();
 			contact.setAddress(str);
 			showContact(contact);
+			
 			break;
 		case '4':
 			str = inputString();
 			contact.setEmail(str);
 			showContact(contact);
+			
 			break;
 		case '5':
 			str = inputString();
 			contact.setMemo(str);
 			showContact(contact);
+			
 			break;
 		case '6':
 			uiOutput("연락처에 추가할 그룹 이름을 입력하세요");
 			str = inputString();
-			Group gr = gm_.find(str);
-			if(gr==null){
-				gr = new Group(str);
-				gm_.add(gr);
+			ArrayList<Group> gr = gm_.find(str);
+			if(gr.isEmpty()){
+				FileManager.logOutput("No other name is found.");
+				Group group = new Group(gm_.getLatestId()+1, str);
+				gm_.add(group);
 			}
-			ContactGroupRelation cgr = new ContactGroupRelation(contact.getId(),gr.getId());
+			ContactGroupRelation cgr = new ContactGroupRelation(cgrm_.getLatestId()+1, contact.getId(),gr.get(0).getId());
 			cgrm_.add(cgr);
 			DatabaseManager.saveCGRIntoDB(cgr);
-			showMain();
+			
 			break;
 		case '7':
 			FileManager.logOutput("Deleted contact: "+contact.getId()+"\t"+contact.getName());
 			cgrm_.remove(contact);
 			cm_.remove(contact);
-			showMain();
+			DatabaseManager.removeContactFromDB(contact);
 			break;
 		case '8':
-			showMain();
+			
 			break;
 		default:
-			showMain();
+			
 			break;
 		}
+		showMain();
 	}
 	
 	public void showEdit(Group group){
@@ -361,28 +376,44 @@ public class UserInterface {
 			str = inputString();
 			group.setName(str);
 			showGroup(group);
+			DatabaseManager.editGroupFromDB(group);
 			break;
 		case '2':
-			showMain();
+			cgrm_.remove(group);
+			gm_.remove(group);
+			DatabaseManager.removeGroupFromDB(group);
+			break;
+		case '3':
 			break;
 		default:
-			showMain();
 			break;
 		}
+		showMain();
 	}
 	
 	public void showAddGroup(){
 		showFile("Interface_groupAdd");
-		String[] atts = {"이름"};
-		for (int i=0; i<atts.length; i++){
-			uiOutput(atts[i]);
-			atts[i] = inputString();
-			Group gr = new Group(atts[i]);
-			gm_.add(gr);
-			DatabaseManager.saveGroupIntoDB(gr);
+		char temp = inputSingleChar();
+		switch(temp){
+		case '1':
+			String[] atts = {"이름"};
+			for (int i=0; i<atts.length; i++){
+				uiOutput(atts[i]);
+				atts[i] = inputString();
+				Group gr = new Group(gm_.getLatestId()+1, atts[i]);
+				gm_.add(gr);
+				DatabaseManager.saveGroupIntoDB(gr);
+			}
+			break;
+		case '2':
+			
+			break;
+		default:
+			
+			break;
 		}
+
 		
-		showMain();
 	}
 	
 	//new Contact("Anthony Schwab",Contact.Male,"478229987054","1892 Nabereznyje Telny Lane","Anthony@Tafuna.samoa","example 2","Visitor");

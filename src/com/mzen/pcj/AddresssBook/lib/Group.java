@@ -10,7 +10,7 @@ public class Group {
 		return name_;
 	}
 	
-	public void setKey(int id) {
+	public void setId(int id) {
 		id_ = id;
 	}
 	
@@ -18,7 +18,8 @@ public class Group {
 		name_ = name;
 	}
 	
-	public Group(String name){
+	public Group(int id, String name){
+		setId(id);
 		setName(name);
 	}
 	

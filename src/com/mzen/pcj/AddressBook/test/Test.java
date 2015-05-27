@@ -16,9 +16,9 @@ public class Test {
 	ContactGroupRelationManager cgrm_ = new ContactGroupRelationManager(cm_,gm_);
 	
 	public void makeData(ContactManager cm, GroupManager gm, ContactGroupRelationManager cgrm){
-		gm.add(new Group("Visitor"));
-		gm.add(new Group("Customer"));
-		cm.add(new Contact(
+		gm.add(new Group(gm_.getLatestId()+1, "Visitor"));
+		gm.add(new Group(gm_.getLatestId()+1,"Customer"));
+		cm.add(new Contact(cm_.getLatestId()+1,
 				"Vera Mccoy",
 				Contact.Female,
 				"886649065861",
@@ -26,8 +26,8 @@ public class Test {
 				"vera@kabul.afghanistan",
 				"example 1"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),1));
-		cm.add(new Contact(
+		cgrm.add(new ContactGroupRelation(cgrm_.getLatestId()+1,cm.getLatest().getId(),1));
+		cm.add(new Contact(cm_.getLatestId()+1,
 				"Mario Cheatham",
 				Contact.Male,
 				"406784385440",
@@ -35,9 +35,9 @@ public class Test {
 				"mario@batna.algeria",
 				"example 2"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),1));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),2));
-		cm.add(new Contact(
+		cgrm.add(new ContactGroupRelation(cgrm_.getLatestId()+1,cm.getLatest().getId(),1));
+		cgrm.add(new ContactGroupRelation(cgrm_.getLatestId()+1,cm.getLatest().getId(),2));
+		cm.add(new Contact(cm_.getLatestId()+1,
 				"Judy Gray",
 				Contact.Female,
 				"107137400143",
@@ -45,8 +45,8 @@ public class Test {
 				"judy@bchar@algeria",
 				"example 3"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),2));
-		cm.add(new Contact(
+		cgrm.add(new ContactGroupRelation(cgrm_.getLatestId()+1,cm.getLatest().getId(),2));
+		cm.add(new Contact(cm_.getLatestId()+1,
 				"June Carroll",
 				Contact.Female,
 				"506134035434",
@@ -54,20 +54,19 @@ public class Test {
 				"june@Skikda.algeria",
 				"example 1"
 				));
-		cgrm.add(new ContactGroupRelation(cm.getLatest().getId(),2));
+		cgrm.add(new ContactGroupRelation(cgrm_.getLatestId()+1,cm.getLatest().getId(),2));
 		
 		
 	}
 	public void retrieveData(){
 		cm_.loadFromJsonFile("AddressBook0.JSON");
-		cm_.add(new Contact(
+		cm_.add(new Contact(cm_.getLatestId()+1,
 				"Anthony Schwab",
 				Contact.Male,
 				"478229987054",
 				"1892 Nabereznyje Telny Lane",
 				"Anthony@Tafuna.samoa",
-				"example 2",
-				"Visitor"
+				"example 2"
 				));
 		cm_.saveAllIntoJsonFile();
 	}

@@ -24,7 +24,8 @@ public class ContactGroupRelation {
 	public void setId(int id){
 		id_ = id;
 	}
-	public ContactGroupRelation(int contactId, int groupId){
+	public ContactGroupRelation(int id, int contactId, int groupId){
+		setId(id);
 		setContactId(contactId);
 		setGroupId(groupId);
 	}

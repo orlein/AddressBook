@@ -12,18 +12,23 @@ public class GroupManager{
 	
 	ArrayList<Group> groups_;
 	Gson gson = new Gson();
-	int id_;
+	int latestId_;
 	
 	
 	public GroupManager(){
-		id_ = 0;
+		//id_ = 0;
 		groups_ = new ArrayList<Group>();
 	}
-	
+	public int getLatestId(){
+		return groups_.get(groups_.size()-1).getId();
+	}
+	public void setLatestId(int latestId){
+		latestId_ = latestId;
+	}
 	
 	public void add(Group group){
-		id_++;
-		group.setKey(id_);
+		//id_++;
+		//group.setKey(id_);
 		groups_.add(group);
 	}
 	public Group[] makeIntoArray(){
@@ -37,16 +42,19 @@ public class GroupManager{
 		return result;
 	}
 	
-	public Group find(String query){
+	public ArrayList<Group> find(String query){
 		Iterator<Group> it = groups_.iterator();
+		ArrayList<Group> result = new ArrayList<Group>();
 		Group temp;
 		while(it.hasNext()){
 			temp = it.next();
+			FileManager.logOutput("Finding: "+temp.getName());
 			if (temp.getName().contains(query)){
-				return temp;
+				FileManager.logOutput("Found: "+query);
+				result.add(temp);
 			}
 		}
-		return null;
+		return result;
 	}
 	public Group findById(int id){
 		Iterator<Group> it = groups_.iterator();
@@ -60,10 +68,9 @@ public class GroupManager{
 		return null;
 	}
 	
-	public boolean remove(String groupName){
+	public boolean remove(Group group){
 		
-		if(groups_.contains(groupName)){
-			groups_.remove(find(groupName));
+		if(groups_.remove(group)){
 			return true;
 		}else{
 			return false;

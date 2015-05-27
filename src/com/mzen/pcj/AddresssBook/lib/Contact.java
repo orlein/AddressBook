@@ -64,15 +64,7 @@ public class Contact {
 	
 	
 	
-	public Contact(String name, String gender, String phoneNumber, String address,
-			String email, String memo){
-		setName(name);
-		setGender(gender);
-		setPhoneNumber(phoneNumber);
-		setAddress(address);
-		setEmail(email);
-		setMemo(memo);
-	}
+
 	public Contact (String[] array){
 		if (array.length == 6){
 			setName(array[0]);
@@ -85,8 +77,9 @@ public class Contact {
 	}
 	
 	
-	public Contact(String name, String gender, String phoneNumber, String address,
-			String email, String memo, String groupName){
+	public Contact(int id, String name, String gender, String phoneNumber, String address,
+			String email, String memo){
+		setId(id);
 		setName(name);
 		setGender(gender);
 		setPhoneNumber(phoneNumber);
