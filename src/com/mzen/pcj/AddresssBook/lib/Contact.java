@@ -14,6 +14,16 @@ public class Contact {
 	private String email_;
 	private String memo_;
 	
+	public enum Attributes{
+		NAME,
+		GENDER,
+		PHONENUMBER,
+		ADDRESS,
+		EMAIL,
+		MEMO,
+		GROUP
+	}
+	
 	public int getId(){
 		return id_;
 	}

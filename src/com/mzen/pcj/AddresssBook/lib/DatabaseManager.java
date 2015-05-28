@@ -125,6 +125,7 @@ public class DatabaseManager {
 		    	//System.out.format("%s, %s, %s\n",id_,contactID_,groupID_);
 				cgrm.add(cgr);
 			}
+			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
@@ -154,7 +155,7 @@ public class DatabaseManager {
 			"\"" +memo_ + "\");";
 			FileManager.logOutput(query);
 			st.executeUpdate(query);
-			
+			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
@@ -188,7 +189,7 @@ public class DatabaseManager {
 			"\"" + name_ + "\");";
 			FileManager.logOutput(query);
 			st.executeUpdate(query);
-			
+			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
@@ -222,6 +223,7 @@ public class DatabaseManager {
 			groupId_ + ");";
 			FileManager.logOutput(query);
 			st.executeUpdate(query);
+			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
@@ -249,6 +251,7 @@ public class DatabaseManager {
 			st.executeUpdate(query);
 			query = "DELETE FROM contact where ID = " + contact.getId();
 			st.executeUpdate(query);
+			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
@@ -263,17 +266,57 @@ public class DatabaseManager {
 			st.executeUpdate(query);
 			query = "DELETE FROM grouptable where ID = " + group.getId();
 			st.executeUpdate(query);
+			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
 		}
 	}
 	
-	public static void editContactFromDB(Contact contact){}
+	public static void editContactFromDB(Contact contact, String subject, Contact.Attributes att){
+		try{
+			Statement st = conn.createStatement();
+			String query = "USE addressbook";
+			st.executeQuery(query);
+			switch(att){
+			case NAME:
+				query = "UPDATE contact SET name = "+ subject +"where id = " + contact.getId()+";";
+				break;				
+			case GENDER:
+				query = "UPDATE contact SET gender = "+ subject +"where id = " + contact.getId()+";";
+				break;
+			case ADDRESS:
+				query = "UPDATE contact SET address = "+ subject +"where id = " + contact.getId()+";";
+				break;
+			case EMAIL:
+				query = "UPDATE contact SET email = "+ subject +"where id = " + contact.getId()+";";
+				break;
+			case MEMO:
+				query = "UPDATE contact SET memo = "+ subject +"where id = " + contact.getId()+";";
+				break;
+			case GROUP:
+				query = "DELETE FROM contactgrouprelation"
+						+ " where groupId="+subject;
+				st.executeUpdate(query);
+				
+				
+				break;
+			default:
+				break;
+			
+			}
+			st.close();
+		}catch(Exception e){
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}
+	}
 	public static void editGroupFromDB(Group group){
 		//did not write the code yet
 	}
-	public static void editCGRFromDB(ContactGroupRelation cgr){}
+	public static void editCGRFromDB(ContactGroupRelation cgr){
+		
+	}
 	
 	public static void endConn(){
 		try {

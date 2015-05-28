@@ -17,7 +17,7 @@ import com.mzen.pcj.AddresssBook.lib.Group;
 import com.mzen.pcj.AddresssBook.lib.GroupManager;
 
 
-public class UserInterface {
+public class UserInterface implements Runnable{
 	ContactManager cm_;
 	GroupManager gm_;
 	ContactGroupRelationManager cgrm_;
@@ -25,6 +25,11 @@ public class UserInterface {
 	Test t1 = new Test();
 	
 	
+	@Override
+	public void run() {
+		initiate();
+		
+	}
 	
 	public static int atoi(String str) {
 		int radix = 10;		
@@ -50,7 +55,7 @@ public class UserInterface {
 		cm_ = DatabaseManager.loadContactFromDB();
 		gm_ = DatabaseManager.loadGroupFromDB();
 		cgrm_ = DatabaseManager.loadCGRFromDB(cm_, gm_);
-
+		
 		showMain();
 	}
 	
@@ -247,25 +252,25 @@ public class UserInterface {
 		case '1':
 			uiOutput("검색할 이름을 입력하세요");
 			query = inputString();
-			result = cm.find(query, "NAME");
+			result = cm.find(query, Contact.Attributes.NAME);
 			showContact(result);
 			break;
 		case '2':
 			uiOutput("검색할 전화번호를 입력하세요");
 			query = inputString();
-			result = cm.find(query, "PHONENUMBER");
+			result = cm.find(query, Contact.Attributes.PHONENUMBER);
 			showContact(result);
 			break;
 		case '3':
 			uiOutput("검색할 주소를 입력하세요");
 			query = inputString();
-			result = cm.find(query, "ADDRESS");
+			result = cm.find(query, Contact.Attributes.ADDRESS);
 			showContact(result);
 			break;
 		case '4':
 			uiOutput("검색할 이메일을 입력하세요");
 			query = inputString();
-			result = cm.find(query, "EMAIL");
+			result = cm.find(query, Contact.Attributes.EMAIL);
 			showContact(result);
 			break;
 		case '5':
@@ -415,6 +420,9 @@ public class UserInterface {
 
 		
 	}
+
+
+	
 	
 	//new Contact("Anthony Schwab",Contact.Male,"478229987054","1892 Nabereznyje Telny Lane","Anthony@Tafuna.samoa","example 2","Visitor");
 	

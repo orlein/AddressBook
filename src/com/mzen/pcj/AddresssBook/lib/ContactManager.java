@@ -53,44 +53,44 @@ public class ContactManager{
 		return result;
 	}
 
-	public ArrayList<Contact> find(String query, String att){
+	public ArrayList<Contact> find(String query, Contact.Attributes att){
 		Iterator<Contact> it = contacts_.iterator();
 		Contact temp;
 		ArrayList<Contact> result = new ArrayList<Contact>();
 		while(it.hasNext()){
 			temp = it.next();
 			switch(att){
-			case "NAME":
+			case NAME:
 				if (temp.getName().contains(query)){
 					FileManager.logOutput("Found name:"+ query);
 					result.add(temp);
 				}
 				break;
-			case "GENDER":
+			case GENDER:
 				if (temp.getGender().contains(query)){
 					FileManager.logOutput("Found gender: "+query);
 					result.add(temp);
 				}
 				break;
-			case "PHONENUMBER":
+			case PHONENUMBER:
 				if (temp.getPhoneNumber().contains(query)){
 					FileManager.logOutput("Found phonenumber: "+ query);
 					result.add(temp);
 				}
 				break;
-			case "ADDRESS":
+			case ADDRESS:
 				if (temp.getAddress().contains(query)){
 					FileManager.logOutput("Found address: "+query);
 					result.add(temp);
 				}
 				break;
-			case "EMAIL":
+			case EMAIL:
 				if (temp.getEmail().contains(query)){
 					FileManager.logOutput("Found email: "+query);
 					result.add(temp);
 				}
 				break;
-			case "MEMO":
+			case MEMO:
 				FileManager.logOutput("cannot find by memo");
 				return null;
 			default:
