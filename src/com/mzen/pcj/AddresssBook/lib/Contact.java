@@ -20,8 +20,7 @@ public class Contact {
 		PHONENUMBER,
 		ADDRESS,
 		EMAIL,
-		MEMO,
-		GROUP
+		MEMO
 	}
 	
 	public int getId(){
@@ -75,8 +74,9 @@ public class Contact {
 	
 	
 
-	public Contact (String[] array){
+	public Contact (int id, String[] array){
 		if (array.length == 6){
+			setId(id);
 			setName(array[0]);
 			setGender(array[1]);
 			setPhoneNumber(array[2]);

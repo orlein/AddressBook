@@ -9,35 +9,40 @@ import java.sql.Statement;
 
 public class DatabaseManager {
 	static String myDriver = "org.gjt.mm.mysql.Driver";
-	static String myUrl = "jdbc:mysql://127.0.0.1:3306/";
+	static String myUrl = "jdbc:mysql://210.115.36.129:3306/";
 	static Connection conn;
+	
+	static String databaseName = "pcj_test";
 	public static void makeTable(){
 		try{
 		Statement st = conn.createStatement();
-		st.executeQuery("create table contact("+
-	"id int unsigned not null,"+
-    "PRIMARY KEY (id),"+
-    "name varchar(20) not null,"+
-    "gender char(1) not null,"+
-    "phoneNumber varchar(15) not null,"+
-    "address varchar(30) not null,"+
-    "email varchar(30) not null,"+
-    "memo  varchar(255) not null);"
-    );
-		st.executeQuery("CREATE TABLE grouptable("+
-    "id int unsigned not null,"+
-	"PRIMARY KEY (id),"+
-    "name varchar(20) not null);"
-    );
-		st.executeQuery("CREATE TABLE ContactGroupRelation("+
-    "id int unsigned not null,"+
-	"PRIMARY KEY (relationid),"+
-    "contactID int unsigned not null,"+
-	"groupID int unsigned not null,"+
-    "FOREIGN KEY(contactID) references contact(id),"+
-	"FOREIGN KEY(groupID) references grouptable(id));"
-    );
 		
+		st.executeQuery("USE " + databaseName);
+		 st.executeUpdate("create table contact("+
+					"id int unsigned not null,"+
+				    "PRIMARY KEY (id),"+
+				    "name varchar(20) not null,"+
+				    "gender char(1) not null,"+
+				    "phoneNumber varchar(15) not null,"+
+				    "address varchar(30) not null,"+
+				    "email varchar(30) not null,"+
+				    "memo  varchar(255) not null);"
+				    );
+			st.executeUpdate("CREATE TABLE grouptable("+
+	    "id int unsigned not null,"+
+		"PRIMARY KEY (id),"+
+	    "name varchar(20) not null);"
+	    );
+			st.executeUpdate("CREATE TABLE ContactGroupRelation("+
+	    "id int unsigned not null,"+
+		"PRIMARY KEY (id),"+
+	    "contactID int unsigned not null,"+
+		"groupID int unsigned not null,"+
+	    "FOREIGN KEY(contactID) references contact(id),"+
+		"FOREIGN KEY(groupID) references grouptable(id));"
+	    );
+		 
+		st.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -46,7 +51,9 @@ public class DatabaseManager {
 		try {
 			Class.forName(myDriver);
 			conn = DriverManager.getConnection(myUrl, userName, password);
-			
+			Statement st = conn.createStatement();
+			st.executeQuery("USE "+databaseName);
+			st.close();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,8 +67,8 @@ public class DatabaseManager {
 		ContactManager cm = new ContactManager();
 		try{
 			Statement st = conn.createStatement();
-		    String query = "USE addressbook"; 
-		    ResultSet rs = st.executeQuery(query);
+		    String query;
+		    ResultSet rs;
 		    query = "SELECT * FROM contact"; 
 		    rs = st.executeQuery(query);
 		    while (rs.next()){
@@ -91,8 +98,8 @@ public class DatabaseManager {
 		GroupManager gm = new GroupManager();
 		try{
 			Statement st = conn.createStatement();
-		    String query = "USE addressbook"; 
-		    ResultSet rs = st.executeQuery(query);
+		    String query; 
+		    ResultSet rs;
 		    query = "SELECT * FROM grouptable"; 
 		    rs = st.executeQuery(query);
 		    while(rs.next()){
@@ -113,9 +120,9 @@ public class DatabaseManager {
 		ContactGroupRelationManager cgrm = new ContactGroupRelationManager(cm,gm);
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			ResultSet rs = st.executeQuery(query);
-			query = "SELECT * FROM contactgrouprelation";
+			String query;
+			ResultSet rs;
+			query = "SELECT * FROM ContactGroupRelation";
 			rs = st.executeQuery(query);
 			while(rs.next()){
 				int id_ = rs.getInt("id");
@@ -136,8 +143,7 @@ public class DatabaseManager {
 	public static void saveContactIntoDB(Contact contact){
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			st.executeQuery(query);
+			String query;
 			int id_ = contact.getId();
 			String name_ = contact.getName();
 			String gender_ = contact.getGender();
@@ -178,8 +184,7 @@ public class DatabaseManager {
 	public static void saveGroupIntoDB(Group group){
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			st.executeQuery(query);
+			String query;
 			//st.executeUpdate("delete grouptable;");
 		
 			int id_ = group.getId();
@@ -211,13 +216,12 @@ public class DatabaseManager {
 	public static void saveCGRIntoDB(ContactGroupRelation cgr){
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			st.executeQuery(query);
+			String query;
 			//st.executeUpdate("delete contactgrouprelation;");
 			int id_ = cgr.getId();
 			int contactId_ = cgr.getContactId();
 			int groupId_ = cgr.getGroupId();
-			query = "INSERT INTO contactGroupRelation (id, contactID, groupID) values ("+
+			query = "INSERT INTO ContactGroupRelation (id, contactID, groupID) values ("+
 			id_ + "," +
 			contactId_ + ","+
 			groupId_ + ");";
@@ -245,12 +249,13 @@ public class DatabaseManager {
 	public static void removeContactFromDB(Contact contact){
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			st.executeQuery(query);
-			query = "DELETE FROM contactgrouprelation where contactID = " + contact.getId();
+			String query;
+			query = "DELETE FROM ContactGroupRelation where contactID = " + contact.getId();
 			st.executeUpdate(query);
+			FileManager.logOutput(query);
 			query = "DELETE FROM contact where ID = " + contact.getId();
 			st.executeUpdate(query);
+			FileManager.logOutput(query);
 			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
@@ -260,12 +265,13 @@ public class DatabaseManager {
 	public static void removeGroupFromDB(Group group){
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			st.executeQuery(query);
-			query = "DELETE FROM contactgrouprelation where groupID = " + group.getId();
+			String query;
+			query = "DELETE FROM ContactGroupRelation where groupID = " + group.getId();
 			st.executeUpdate(query);
+			FileManager.logOutput(query);
 			query = "DELETE FROM grouptable where ID = " + group.getId();
 			st.executeUpdate(query);
+			FileManager.logOutput(query);
 			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
@@ -273,38 +279,35 @@ public class DatabaseManager {
 		}
 	}
 	
-	public static void editContactFromDB(Contact contact, String subject, Contact.Attributes att){
+	public static void editContactFromDB(Contact contact, Contact.Attributes att){
 		try{
 			Statement st = conn.createStatement();
-			String query = "USE addressbook";
-			st.executeQuery(query);
+			String query;
 			switch(att){
 			case NAME:
-				query = "UPDATE contact SET name = "+ subject +"where id = " + contact.getId()+";";
+				query = "UPDATE contact SET name = \""+ contact.getName() +"\" where id = " + contact.getId()+";";
 				break;				
 			case GENDER:
-				query = "UPDATE contact SET gender = "+ subject +"where id = " + contact.getId()+";";
+				query = "UPDATE contact SET gender = \""+ contact.getGender() +"\" where id = " + contact.getId()+";";
+				break;
+			case PHONENUMBER:
+				query = "UPDATE contact SET phonenumber = \""+ contact.getPhoneNumber() +"\" where id = " + contact.getId()+";";
 				break;
 			case ADDRESS:
-				query = "UPDATE contact SET address = "+ subject +"where id = " + contact.getId()+";";
+				query = "UPDATE contact SET address = \""+ contact.getAddress() +"\" where id = " + contact.getId()+";";
 				break;
 			case EMAIL:
-				query = "UPDATE contact SET email = "+ subject +"where id = " + contact.getId()+";";
+				query = "UPDATE contact SET email = \""+ contact.getEmail() +"\" where id = " + contact.getId()+";";
 				break;
 			case MEMO:
-				query = "UPDATE contact SET memo = "+ subject +"where id = " + contact.getId()+";";
-				break;
-			case GROUP:
-				query = "DELETE FROM contactgrouprelation"
-						+ " where groupId="+subject;
-				st.executeUpdate(query);
-				
-				
+				query = "UPDATE contact SET memo = \""+ contact.getMemo() +"\" where id = " + contact.getId()+";";
 				break;
 			default:
+				query = "";
 				break;
-			
 			}
+			st.executeUpdate(query);
+			FileManager.logOutput(query);
 			st.close();
 		}catch(Exception e){
 			System.err.println("Got an exception! ");
@@ -312,10 +315,33 @@ public class DatabaseManager {
 		}
 	}
 	public static void editGroupFromDB(Group group){
-		//did not write the code yet
+		try{
+			Statement st = conn.createStatement();
+			String query;
+			query = "UPDATE grouptable SET name = \""+group.getName()+"\"WHERE id = "+group.getId();
+			st.executeUpdate(query);
+			st.close();
+			FileManager.logOutput(query);
+		}catch(Exception e){
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}
+		
 	}
 	public static void editCGRFromDB(ContactGroupRelation cgr){
-		
+		try{
+			Statement st = conn.createStatement();
+			String query;
+			query = "UPDATE ContactGroupRelation SET contactID = "+cgr.getContactId()+"AND groupID = "+cgr.getGroupId()
+					+"WHERE id = "+cgr.getId();
+			st.executeUpdate(query);
+			st.close();
+			FileManager.logOutput(query);
+			
+		}catch(Exception e){
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}                                                          
 	}
 	
 	public static void endConn(){
@@ -326,4 +352,5 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 	}
+	
 }

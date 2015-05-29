@@ -27,8 +27,15 @@ public class UserInterface implements Runnable{
 	
 	@Override
 	public void run() {
+		
 		initiate();
 		
+		
+		
+		boolean isEnding = false;
+		while(!isEnding){
+			isEnding = showMain();
+		}
 	}
 	
 	public static int atoi(String str) {
@@ -51,12 +58,13 @@ public class UserInterface implements Runnable{
 		cm_ = new ContactManager();
 		gm_ = new GroupManager();
 		cgrm_ = new ContactGroupRelationManager(cm_,gm_);
-		DatabaseManager.init("newuser", "Dpawps!@#$");
+		DatabaseManager.init("pcj9024", "1234zzz");
+		//DatabaseManager.makeTable();
 		cm_ = DatabaseManager.loadContactFromDB();
 		gm_ = DatabaseManager.loadGroupFromDB();
 		cgrm_ = DatabaseManager.loadCGRFromDB(cm_, gm_);
 		
-		showMain();
+		 
 	}
 	
 	public char inputSingleChar(){
@@ -80,7 +88,6 @@ public class UserInterface implements Runnable{
 		Scanner scan = new Scanner(System.in);
 		msg = scan.nextLine();
 		
-		
 		FileManager.logOutput("입력함:"+msg);
 		
 		return msg;
@@ -88,7 +95,7 @@ public class UserInterface implements Runnable{
 	
 	
 	
-	public void showMain(){
+	public boolean showMain(){
 		showFile("Interface_main");
 		
 		char temp = inputSingleChar();
@@ -116,12 +123,11 @@ public class UserInterface implements Runnable{
 			break;
 		case '8':
 			DatabaseManager.endConn();
-			System.exit(0);
-			break;
+			return true;
 		default:
-			showMain();
 			break;
 		}
+		return false;
 	}
 	public void showList(ContactManager cm){
 		showFile("Interface_contactList");
@@ -142,7 +148,7 @@ public class UserInterface implements Runnable{
 			showContact(cm.findByKey(atoi(query)));
 			showEdit(cm.findByKey(atoi(query)));
 		}else{
-			showMain();
+			 
 		}
 	}
 	public void showList(GroupManager gm){
@@ -158,7 +164,7 @@ public class UserInterface implements Runnable{
 			showEdit(gm_.findById(atoi(query)));
 		}
 		
-		showMain();
+		 
 		
 	}
 	
@@ -218,9 +224,13 @@ public class UserInterface implements Runnable{
 		gm_.loadFromJsonFile(fileName);
 		fileName = FileManager.fileName_CGR + input + ".JSON";
 		cgrm_.loadFromJsonFile(fileName);
+		
+		DatabaseManager.saveContactIntoDB(cm_);
+		DatabaseManager.saveGroupIntoDB(gm_);
+		DatabaseManager.saveCGRIntoDB(cgrm_);
 		FileManager.logOutput("load to cm");
 		showList(cm_);
-		showMain();
+		 
 	}
 	public void showAddContact(){
 		showFile("Interface_contactAdd");
@@ -229,19 +239,16 @@ public class UserInterface implements Runnable{
 			uiOutput(atts[i]);
 			atts[i] = inputString();
 		}
-		Contact con = new Contact(atts);
-		cm_.add(con);
-		DatabaseManager.saveContactIntoDB(con);
-		showMain();
+		Contact contact = new Contact(cm_.getLatestId()+1,atts);
+		cm_.add(contact);
+		DatabaseManager.saveContactIntoDB(contact);
+		 
 	}
 	public void showSave(){
 		showFile("Interface_save");
 		cm_.saveAllIntoJsonFile();
 		gm_.saveAllIntoJsonFile();
 		cgrm_.saveAllIntoJsonFile();
-		
-		
-		showMain();
 	}
 	public void showFind(ContactManager cm){
 		showFile("Interface_contactFind");
@@ -285,7 +292,7 @@ public class UserInterface implements Runnable{
 			
 			break;
 		}
-		showMain();
+		 
 	}
 	public void showFind(GroupManager gm){
 		showFile("Interface_groupFind");
@@ -303,7 +310,7 @@ public class UserInterface implements Runnable{
 		default:
 			break;
 		}
-		showMain();
+		 
 	}
 	
 	
@@ -316,33 +323,39 @@ public class UserInterface implements Runnable{
 			str = inputString();
 			contact.setName(str);
 			showContact(contact);
-			
+			DatabaseManager.editContactFromDB(contact, Contact.Attributes.NAME);
 			break;
 		case '2':
 			str = inputString();
 			contact.setGender(str);
 			showContact(contact);
-			
+			DatabaseManager.editContactFromDB(contact, Contact.Attributes.GENDER);
 			break;
 		case '3':
 			str = inputString();
-			contact.setAddress(str);
+			contact.setPhoneNumber(str);
 			showContact(contact);
-			
+			DatabaseManager.editContactFromDB(contact, Contact.Attributes.PHONENUMBER);
 			break;
 		case '4':
 			str = inputString();
-			contact.setEmail(str);
+			contact.setAddress(str);
 			showContact(contact);
-			
+			DatabaseManager.editContactFromDB(contact, Contact.Attributes.ADDRESS);
 			break;
 		case '5':
 			str = inputString();
-			contact.setMemo(str);
+			contact.setEmail(str);
 			showContact(contact);
-			
+			DatabaseManager.editContactFromDB(contact, Contact.Attributes.EMAIL);
 			break;
 		case '6':
+			str = inputString();
+			contact.setMemo(str);
+			showContact(contact);
+			DatabaseManager.editContactFromDB(contact, Contact.Attributes.MEMO);
+			break;
+		case '7':
 			uiOutput("연락처에 추가할 그룹 이름을 입력하세요");
 			str = inputString();
 			ArrayList<Group> gr = gm_.find(str);
@@ -354,22 +367,21 @@ public class UserInterface implements Runnable{
 			ContactGroupRelation cgr = new ContactGroupRelation(cgrm_.getLatestId()+1, contact.getId(),gr.get(0).getId());
 			cgrm_.add(cgr);
 			DatabaseManager.saveCGRIntoDB(cgr);
-			
 			break;
-		case '7':
+		case '8':
 			FileManager.logOutput("Deleted contact: "+contact.getId()+"\t"+contact.getName());
 			cgrm_.remove(contact);
 			cm_.remove(contact);
 			DatabaseManager.removeContactFromDB(contact);
 			break;
-		case '8':
+		case '9':
 			
 			break;
 		default:
 			
 			break;
 		}
-		showMain();
+		 
 	}
 	
 	public void showEdit(Group group){
@@ -393,7 +405,7 @@ public class UserInterface implements Runnable{
 		default:
 			break;
 		}
-		showMain();
+		 
 	}
 	
 	public void showAddGroup(){
