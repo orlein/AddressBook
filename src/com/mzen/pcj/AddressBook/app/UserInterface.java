@@ -82,12 +82,13 @@ public class UserInterface implements Runnable{
 		return 0;
 	}
 	
-	@SuppressWarnings("resource")
+	
 	public String inputString(){
 		String msg;
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		msg = scan.nextLine();
-		
+		//scan.close();
 		FileManager.logOutput("입력함:"+msg);
 		
 		return msg;

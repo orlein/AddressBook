@@ -326,7 +326,6 @@ public class DatabaseManager {
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
 		}
-		
 	}
 	public static void editCGRFromDB(ContactGroupRelation cgr){
 		try{
