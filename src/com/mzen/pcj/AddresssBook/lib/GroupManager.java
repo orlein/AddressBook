@@ -50,7 +50,7 @@ public class GroupManager{
 			temp = it.next();
 			FileManager.logOutput("Finding: "+temp.getName());
 			if (temp.getName().contains(query)){
-				FileManager.logOutput("Found: "+query);
+				FileManager.logOutput("Found: "+temp.getName());
 				result.add(temp);
 			}
 		}

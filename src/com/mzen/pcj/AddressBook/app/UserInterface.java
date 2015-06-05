@@ -235,12 +235,28 @@ public class UserInterface implements Runnable{
 	}
 	public void showAddContact(){
 		showFile("Interface_contactAdd");
-		String[] atts = {"이름","성(M/F)","전화번호","주소","이메일","메모"};
-		for (int i=0; i<atts.length; i++){
-			uiOutput(atts[i]);
-			atts[i] = inputString();
+		String[] contactAtts = {"이름","성(M/F)","전화번호","주소","이메일","메모"};
+		for (int i=0; i<contactAtts.length; i++){
+			uiOutput(contactAtts[i]);
+			contactAtts[i] = inputString();
 		}
-		Contact contact = new Contact(cm_.getLatestId()+1,atts);
+		uiOutput("그룹");
+		showGroup(gm_.getList());
+		uiOutput("[그룹이름을 입력하여 그룹명을 고르세요]");
+		String num = inputString();
+		Group tempGroup = gm_.findById(atoi(num));
+		if (tempGroup== null){
+			showAddGroup();
+			tempGroup = gm_.findById(gm_.getLatestId()+1);
+			DatabaseManager.saveGroupIntoDB(tempGroup);
+		}
+		ContactGroupRelation cgr = new ContactGroupRelation(cgrm_.getLatestId()+1, 
+				cm_.getLatestId()+1, 
+				tempGroup.getId());
+		cgrm_.add(cgr);
+		DatabaseManager.saveCGRIntoDB(cgr);
+		
+		Contact contact = new Contact(cm_.getLatestId()+1,contactAtts);
 		cm_.add(contact);
 		DatabaseManager.saveContactIntoDB(contact);
 		 
@@ -293,7 +309,7 @@ public class UserInterface implements Runnable{
 			
 			break;
 		}
-		 
+		
 	}
 	public void showFind(GroupManager gm){
 		showFile("Interface_groupFind");
