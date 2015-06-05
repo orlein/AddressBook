@@ -1,4 +1,4 @@
-package com.mzen.pcj.AddresssBook.lib;
+package com.mzen.pcj.AddressBook.lib;
 
 import java.util.ArrayList;
 import java.util.Iterator;

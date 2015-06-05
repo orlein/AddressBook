@@ -1,4 +1,4 @@
-package com.mzen.pcj.AddresssBook.lib;
+package com.mzen.pcj.AddressBook.lib;
 
 public class Group {
 	int id_;

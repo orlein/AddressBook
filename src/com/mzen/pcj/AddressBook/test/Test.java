@@ -3,12 +3,12 @@ package com.mzen.pcj.AddressBook.test;
 
 import java.util.ArrayList;
 
-import com.mzen.pcj.AddresssBook.lib.Contact;
-import com.mzen.pcj.AddresssBook.lib.ContactGroupRelation;
-import com.mzen.pcj.AddresssBook.lib.ContactGroupRelationManager;
-import com.mzen.pcj.AddresssBook.lib.ContactManager;
-import com.mzen.pcj.AddresssBook.lib.Group;
-import com.mzen.pcj.AddresssBook.lib.GroupManager;
+import com.mzen.pcj.AddressBook.lib.Contact;
+import com.mzen.pcj.AddressBook.lib.ContactGroupRelation;
+import com.mzen.pcj.AddressBook.lib.ContactGroupRelationManager;
+import com.mzen.pcj.AddressBook.lib.ContactManager;
+import com.mzen.pcj.AddressBook.lib.Group;
+import com.mzen.pcj.AddressBook.lib.GroupManager;
 
 public class Test {
 	ContactManager cm_ = new ContactManager();

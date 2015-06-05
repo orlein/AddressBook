@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import com.mzen.pcj.AddressBook.lib.Contact;
+import com.mzen.pcj.AddressBook.lib.ContactGroupRelation;
+import com.mzen.pcj.AddressBook.lib.ContactGroupRelationManager;
+import com.mzen.pcj.AddressBook.lib.ContactManager;
+import com.mzen.pcj.AddressBook.lib.DatabaseManager;
+import com.mzen.pcj.AddressBook.lib.FileManager;
+import com.mzen.pcj.AddressBook.lib.Group;
+import com.mzen.pcj.AddressBook.lib.GroupManager;
 import com.mzen.pcj.AddressBook.test.Test;
-import com.mzen.pcj.AddresssBook.lib.Contact;
-import com.mzen.pcj.AddresssBook.lib.ContactGroupRelation;
-import com.mzen.pcj.AddresssBook.lib.ContactGroupRelationManager;
-import com.mzen.pcj.AddresssBook.lib.ContactManager;
-import com.mzen.pcj.AddresssBook.lib.DatabaseManager;
-import com.mzen.pcj.AddresssBook.lib.FileManager;
-import com.mzen.pcj.AddresssBook.lib.Group;
-import com.mzen.pcj.AddresssBook.lib.GroupManager;
 
 
 public class UserInterface implements Runnable{
